@@ -1,0 +1,30 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+
+<dom-module id="socobo-element-template">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+
+  <template>
+    <div>Hello from <span>{{socobo}}</span></div>
+  </template>
+
+</dom-module>
+
+<script>
+(function() {
+  Polymer({
+    is: 'socobo-element-template',
+
+    properties: {
+      socobo: {
+        type: String,
+        value: 'socobo-template-element',
+        notify: true
+      }
+    }
+  });
+})();
+</script>
