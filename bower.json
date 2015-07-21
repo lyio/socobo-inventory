@@ -1,6 +1,6 @@
 {
   "name": "socobo-element-template",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Template Element for Socobo-Frontend",
   "authors": [
     "flashback2k14"
@@ -13,7 +13,7 @@
     "frontend"
   ],
   "main": "socobo-element-template.html",
-  "private": false,
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/flashback2k14/socobo-element-template"
