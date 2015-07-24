@@ -5,12 +5,15 @@
 1. download and install **NodeJS and NPM**
 2. install bower with **npm install -g bower**
 3. install web-component-tester with **npm install -g web-component-tester**
-4. go to the socobo-element-template folder and install dependencies with **bower install**
-5. ready to rock!
+4. install polyserve with **npm install -g polyserve**
+5. go to the socobo-element-template folder and install dependencies with **bower install**
+6. ready to rock!
 
 ## Notes:
 ---------
-- run web-component-tester with **wct** inside the socobo-element-template folder
+- **IMPORTANT**: use canonical path for your imports, this means use _../_ instead of _bower_component/_ 
+- run server with **polyserve** inside the socobo-element-template folder to demo your element
+- run web-component-tester with **wct** inside the socobo-element-template folder to test your element
 
 ## Resources:
 -------------

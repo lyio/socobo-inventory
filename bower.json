@@ -1,8 +1,8 @@
 {
   "name": "socobo-element-template",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Template Element for Socobo-Frontend",
-  "authors": [
+  "author": [
     "flashback2k14"
   ],
   "keywords": [
