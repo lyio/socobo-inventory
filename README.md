@@ -13,6 +13,7 @@
 ---------
 - **IMPORTANT**: use canonical path for your imports, this means use _../_ instead of _bower_component/_ 
 - run server with **polyserve** inside the socobo-element-template folder to demo your element
+- go to **localhost:8080/components/socobo-element-template/demo** in your browser
 - run web-component-tester with **wct** inside the socobo-element-template folder to test your element
 
 ## Resources:

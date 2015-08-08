@@ -1,6 +1,6 @@
 {
   "name": "socobo-element-template",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Template Element for Socobo-Frontend",
   "author": [
     "flashback2k14"
@@ -20,6 +20,7 @@
   },
   "license": "",
   "homepage": "",
+  "ignore": [],
   "dependencies": {
     "iron-elements": "PolymerElements/iron-elements#1.0.0",
     "paper-elements": "PolymerElements/paper-elements#1.0.1",
