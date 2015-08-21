@@ -1,9 +1,9 @@
 {
-  "name": "socobo-element-template",
-  "version": "0.0.4",
-  "description": "Template Element for Socobo-Frontend",
+  "name": "socobo-inventory",
+  "version": "0.0.1",
+  "description": "Inventory Element for Socobo-Frontend",
   "author": [
-    "flashback2k14"
+    "lyio"
   ],
   "keywords": [
     "web-components",
@@ -12,11 +12,11 @@
     "socobo",
     "frontend"
   ],
-  "main": "socobo-element-template.html",
+  "main": "socobo-inventory.html",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/flashback2k14/socobo-element-template"
+    "url": "git://github.com/lyio/socobo-inventory"
   },
   "license": "",
   "homepage": "",
@@ -26,7 +26,8 @@
     "paper-elements": "PolymerElements/paper-elements#1.0.1",
     "platinum-elements": "PolymerElements/platinum-elements#1.0.1",
     "neon-elements": "PolymerElements/neon-elements#1.0.0",
-    "polymer": "Polymer/polymer#^1.0.0"
+    "polymer": "Polymer/polymer#^1.0.0",
+    "socobo-list-item": "hetec/socobo-list-item"
   },
   "devDependencies": {
     "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
