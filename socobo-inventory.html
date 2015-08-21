@@ -71,20 +71,14 @@
 
       <paper-material elevation="1">
         <div id="inventoryOverview" class="overview">
-          <iron-list items="[[data]]" as="item">
-            <template>
-              <div class="inventory-item-container">
-                <paper-item class="item-name">
-                  <paper-checkbox class="itemCheckBox" id="inventoryCheckBox"></paper-checkbox>
-                  <paper-item-body >[[item.name]]</paper-item-body>
-                  <div class="buttons">
-                    <paper-icon-button icon="create"></paper-icon-button>
-                    <paper-icon-button icon="delete"></paper-icon-button>
-                  </div>
-                </paper-item>
-              </div>
+            <template is="dom-repeat" items="[[data]]">
+                <socobo-list-item
+                  obj="{{item}}"
+                  isChecked="{{valueOfCheckBox}}"
+                  on-check="handleCheck"
+                  on-uncheck="handleUncheck">
+                  ></socobo-list-item>
             </template>
-          </iron-list>
         </div>
       </paper-material>
     </paper-material>
@@ -104,19 +98,18 @@
           type: String,
           value: 'socobo-inventory',
           notify: true
-        },
-        data: []
+        }
       },
 
       ready: function () {
         this.data = [
-          {"name": "Mehl"},
-          {"name": "Butter"},
-          {"name": "Butter"},
-          {"name": "Butter"},
-          {"name": "Butter"},
-          {"name": "Gurke"}];
-      }
+          {desc: "Mehl", info: "1kg"},
+          {desc: "Butter", info: "250g"},
+          {desc: "Gurke", info: "2 Stk."},
+          {desc: "Zucker", info: "2kg"}];
+      },
+      handleCheck: function(){},
+      handleUncheck: function(){}
     });
   })();
 </script>
