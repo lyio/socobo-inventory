@@ -13,29 +13,22 @@
 
     .searchBox {
       display: inline-block;
-      padding: 8px;
       width: 100%;
-      @apply(--layout-horizontal);
+      @apply(- -layout-horizontal);
     }
 
     .checkBoxAll {
-      margin-top: 32px;
       margin-left: 16px;
+      --paper-checkbox-unchecked-color: var(--text-primary-color);
+      --paper-checkbox-checked-color: var(--accent-color)
     }
 
     .search-input {
-      @apply(--layout-flex);
+    @apply(--layout-flex);
       margin-left: 32px;
-      margin-right: 32px;
-    }
-
-    .buttons {
-      float: right;
-    }
-
-    .itemCheckBox {
-      margin-right: 32px;
-      margin-top: 8px;
+      --paper-input-container-color: var(--text-primary-color);
+      --paper-input-container-focus-color: var(--text-primary-color);
+      --paper-input-container-input-color: var(--text-primary-color)
     }
 
     .overview {
@@ -49,35 +42,37 @@
       border: 4px solid #ddd;
     }
 
-    .item-name {
-      margin-top: 20px;
+    .button-add {
+      position: absolute;
+      right: 30px;
+      bottom: 30px;
+      --paper-fab-background: var(--accent-color);
     }
   </style>
 
   <template>
     <paper-material vertical layout class="inventory" elevation="1">
-      <paper-material elevation="1">
-        <div class="searchBox">
+      <paper-toolbar class="searchBox">
           <paper-checkbox class="checkBoxAll" id="inventoryCheckBoxAll"></paper-checkbox>
           <paper-input class="search-input" id="inventorySearch" label="Suche"></paper-input>
-        </div>
-      </paper-material>
+      </paper-toolbar>
 
       <paper-material elevation="1">
         <div id="inventoryOverview" class="overview">
-            <template is="dom-repeat" items="[[data]]">
-                <socobo-list-item
-                  obj="{{item}}"
-                  isChecked="{{valueOfCheckBox}}"
-                  on-check="handleCheck"
-                  on-uncheck="handleUncheck">
-                  ></socobo-list-item>
-            </template>
+          <template is="dom-repeat" items="[[data]]">
+            <socobo-list-item
+              obj="{{item}}"
+              isChecked="{{valueOfCheckBox}}"
+              on-check="handleCheck"
+              on-uncheck="handleUncheck">
+              >
+            </socobo-list-item>
+          </template>
         </div>
       </paper-material>
     </paper-material>
 
-    <paper-fab style="position:absolute; right: 30px; bottom: 30px" icon="add"></paper-fab>
+    <paper-fab class="button-add" icon="add"></paper-fab>
   </template>
 
 </dom-module>
@@ -102,8 +97,10 @@
           {desc: "Gurke", info: "2 Stk."},
           {desc: "Zucker", info: "2kg"}];
       },
-      handleCheck: function(){},
-      handleUncheck: function(){}
+      handleCheck: function () {
+      },
+      handleUncheck: function () {
+      }
     });
   })();
 </script>
