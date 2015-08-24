@@ -22,9 +22,9 @@
   "homepage": "",
   "ignore": [],
   "dependencies": {
-    "iron-elements": "PolymerElements/iron-elements#1.0.0",
-    "paper-elements": "PolymerElements/paper-elements#1.0.1",
-    "platinum-elements": "PolymerElements/platinum-elements#1.0.1",
+    "iron-elements": "PolymerElements/iron-elements#1.0.2",
+    "paper-elements": "PolymerElements/paper-elements#1.0.2",
+    "platinum-elements": "PolymerElements/platinum-elements#1.1.1",
     "neon-elements": "PolymerElements/neon-elements#1.0.0",
     "polymer": "Polymer/polymer#^1.0.0",
     "socobo-list-item": "hetec/socobo-list-item"
