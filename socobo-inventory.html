@@ -1,4 +1,5 @@
 <link rel="import" href="elements.html">
+<link rel="import" href="socobo-inventory-create.html">
 
 <dom-module id="socobo-inventory">
   <style>
@@ -45,13 +46,17 @@
       bottom: 30px;
       --paper-fab-background: var(--accent-color);
     }
+
+    #inventoryCreateDialog {
+      display: none;
+    }
   </style>
 
   <template>
-    <paper-material vertical layout class="inventory" elevation="1">
+    <paper-material vertical layout id="socoboInventory" class="inventory" elevation="1">
       <paper-toolbar class="searchBox">
-          <paper-checkbox class="checkBoxAll" id="inventoryCheckBoxAll"></paper-checkbox>
-          <paper-input class="search-input" id="inventorySearch" label="Suche"></paper-input>
+        <paper-checkbox class="checkBoxAll" id="inventoryCheckBoxAll"></paper-checkbox>
+        <paper-input class="search-input" id="inventorySearch" label="Suche"></paper-input>
       </paper-toolbar>
 
       <paper-material elevation="1">
@@ -67,9 +72,13 @@
           </template>
         </div>
       </paper-material>
+
     </paper-material>
 
-    <paper-fab class="button-add" icon="add"></paper-fab>
+    <socobo-inventory-create id="inventoryCreateDialog">
+    </socobo-inventory-create>
+
+    <paper-fab class="button-add" icon="add" on-click="createItem"></paper-fab>
   </template>
 
 </dom-module>
@@ -97,6 +106,13 @@
       handleCheck: function () {
       },
       handleUncheck: function () {
+      },
+
+      createItem: function () {
+        var that = this;
+        console.log("show create dialog")
+        that.$.inventoryCreateDialog.style.display = "block";
+        that.$.inventoryCreateDialog.show();
       }
     });
   })();

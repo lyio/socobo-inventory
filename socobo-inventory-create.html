@@ -1,0 +1,90 @@
+<link rel="import" href="elements.html">
+
+<dom-module id="socobo-inventory-create">
+  <style>
+    :host {
+      display: block;
+    }
+
+    .create-dialog {
+      --paper-dialog-button-color: var(--accent-color);
+      min-height: 300px;
+    }
+
+    paper-input {
+      --paper-input-container-color: var(--text-secondary-color);
+      /*--paper-input-container-focus-color: var(--text-primary-color);*/
+      /*--paper-input-container-input-color: var(--text-primary-color)*/
+    }
+
+    .count-input-area {
+      @apply(--layout-horizontal);
+    }
+
+    #countInput {
+      @apply(--layout-flex);
+      @apply(--layout-center);
+    }
+
+    .kind-dropdown {
+      @apply(--layout-flex);
+      @apply(--layout-center);
+      margin-bottom: 8px;
+    }
+
+    .input {
+      min-width: 100px;
+      max-width: 300px;
+      --paper-input-container-color: var(--text-secondary-color);
+      /*--paper-input-container-focus-color: var(--text-primary-color);*/
+      /*--paper-input-container-input-color: var(--text-primary-color)*/
+    }
+  </style>
+
+  <template>
+    <paper-dialog class="create-dialog" id="dialog">
+      <paper-toolbar class="dialog-header">
+        <span>Neues Element anlegen</span>
+      </paper-toolbar>
+      <paper-input class="input" value="{{name::input}}" id="itemName" label="Bezeichnung"></paper-input>
+      <div class="layout-flex count-input-area">
+        <paper-input class="input" id="countInput" value="{{count::input}}" label="Menge/Anzahl"></paper-input>
+          <paper-dropdown-menu label="Art" class="kind-dropdown">
+            <paper-menu class="dropdown-content">
+              <paper-item>kg</paper-item>
+              <paper-item>g</paper-item>
+              <paper-item>Stk.</paper-item>
+              <paper-item>l</paper-item>
+            </paper-menu>
+        </paper-dropdown-menu>
+      </div>
+      <paper-input class="input" value="{{bestBefore::input}}" label="Haltbar bis"></paper-input>
+      <paper-dropdown-menu label="Kategorie">
+        <paper-menu class="dropdown-content">
+          <paper-item>Backen</paper-item>
+          <paper-item>Gewürze</paper-item>
+          <paper-item>Gemüse</paper-item>
+          <paper-item>Madeleine</paper-item>
+        </paper-menu>
+      </paper-dropdown-menu>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm>Accept</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'socobo-inventory-create',
+      properties: {
+      },
+
+      show: function () {
+        this.$.dialog.toggle();
+      }
+    });
+  })();
+</script>
