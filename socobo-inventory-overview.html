@@ -50,12 +50,12 @@
       <paper-material elevation="1">
         <div id="inventoryOverview" class="overview">
           <template is="dom-repeat" items="[[data]]">
-            <socobo-list-item
+            <socobo-element-list-item
               obj="{{item}}"
               isChecked="{{valueOfCheckBox}}"
               on-check="handleCheck"
               on-uncheck="handleUncheck">
-            </socobo-list-item>
+            </socobo-element-list-item>
           </template>
         </div>
       </paper-material>
