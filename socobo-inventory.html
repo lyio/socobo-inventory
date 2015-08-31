@@ -1,43 +1,11 @@
 <link rel="import" href="elements.html">
 <link rel="import" href="socobo-inventory-create.html">
+<link rel="import" href="socobo-inventory-overview.html">
 
 <dom-module id="socobo-inventory">
   <style>
     :host {
       display: block;
-    }
-
-    .inventory {
-      margin: 0px;
-      padding: 0px;
-      width: 100%;
-      height: 100%;
-    }
-
-    .searchBox {
-      display: inline-block;
-      width: 100%;
-      @apply(--layout-horizontal);
-    }
-
-    .checkBoxAll {
-      margin-left: 16px;
-      margin-top: 12px;
-      --paper-checkbox-unchecked-color: var(--text-primary-color);
-      --paper-checkbox-checked-color: var(--accent-color)
-    }
-
-    .search-input {
-    @apply(--layout-flex);
-      margin-left: 32px;
-      margin-bottom: 16px;
-      --paper-input-container-color: var(--text-primary-color);
-      --paper-input-container-focus-color: var(--text-primary-color);
-      --paper-input-container-input-color: var(--text-primary-color)
-    }
-
-    .overview {
-      padding: 0px;
     }
 
     .button-add {
@@ -53,32 +21,11 @@
   </style>
 
   <template>
-    <paper-material vertical layout id="socoboInventory" class="inventory" elevation="1">
-      <paper-toolbar class="searchBox">
-        <paper-checkbox class="checkBoxAll" id="inventoryCheckBoxAll"></paper-checkbox>
-        <paper-input class="search-input" id="inventorySearch" label="Suche"></paper-input>
-      </paper-toolbar>
-
-      <paper-material elevation="1">
-        <div id="inventoryOverview" class="overview">
-          <template is="dom-repeat" items="[[data]]">
-            <socobo-list-item
-              obj="{{item}}"
-              isChecked="{{valueOfCheckBox}}"
-              on-check="handleCheck"
-              on-uncheck="handleUncheck">
-              >
-            </socobo-list-item>
-          </template>
-        </div>
-      </paper-material>
-
-    </paper-material>
-
     <socobo-inventory-create id="inventoryCreateDialog">
     </socobo-inventory-create>
 
-    <paper-fab class="button-add" icon="add" on-click="createItem"></paper-fab>
+    <socobo-inventory-overview data="{{data}}"></socobo-inventory-overview>
+    <paper-fab id="inventory-button-add" class="button-add" icon="add" on-click="createItem"></paper-fab>
   </template>
 
 </dom-module>
@@ -88,13 +35,7 @@
     Polymer({
       is: 'socobo-inventory',
 
-      properties: {
-        socobo: {
-          type: String,
-          value: 'socobo-inventory',
-          notify: true
-        }
-      },
+      properties: {},
 
       ready: function () {
         this.data = [
