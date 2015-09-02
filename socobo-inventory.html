@@ -1,4 +1,5 @@
 <link rel="import" href="elements.html">
+<link rel="import" href="socobo-inventory-create.html">
 <link rel="import" href="socobo-inventory-overview.html">
 
 <dom-module id="socobo-inventory">
@@ -13,11 +14,18 @@
       bottom: 30px;
       --paper-fab-background: var(--accent-color);
     }
+
+    #inventoryCreateDialog {
+      display: none;
+    }
   </style>
 
   <template>
+    <socobo-inventory-create id="inventoryCreateDialog">
+    </socobo-inventory-create>
+
     <socobo-inventory-overview data="{{data}}"></socobo-inventory-overview>
-    <paper-fab id="inventory-button-add" class="button-add" icon="add"></paper-fab>
+    <paper-fab id="inventory-button-add" class="button-add" icon="add" on-click="createItem"></paper-fab>
   </template>
 
 </dom-module>
@@ -35,6 +43,15 @@
           {desc: "Butter", info: "250g"},
           {desc: "Gurke", info: "2 Stk."},
           {desc: "Puderzucker", info: "2kg"}];
+      },
+      handleCheck: function () {
+      },
+      handleUncheck: function () {
+      },
+
+      createItem: function () {
+        this.$.inventoryCreateDialog.style.display = "block";
+        this.$.inventoryCreateDialog.show();
       }
     });
   })();
