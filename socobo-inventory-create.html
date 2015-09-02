@@ -19,7 +19,7 @@
       @apply(--layout-horizontal);
     }
 
-    #countInput {
+    .count-input-area .input {
       @apply(--layout-flex);
       @apply(--layout-center);
     }
@@ -38,7 +38,7 @@
       --paper-input-container-input-color: var(--text-secondary-color);
     }
     
-    paper-button {
+    .create-dialog .buttons > * {
       margin: 8px;
     }
 
@@ -48,9 +48,9 @@
     <paper-dialog class="create-dialog" id="dialog">
       <h2>Neues Element anlegen</h2>  
       <paper-dialog-scrollable>
-      <paper-input class="input" value="{{name::input}}" id="itemName" label="Bezeichnung"></paper-input>
+      <paper-input class="input" value="{{name}}" id="itemName" label="Bezeichnung"></paper-input>
       <div class="layout-flex count-input-area">
-        <paper-input class="input" id="countInput" value="{{count::input}}" label="Menge/Anzahl"></paper-input>
+        <paper-input class="input" id="countInput" value="{{count}}" label="Menge/Anzahl"></paper-input>
           <paper-dropdown-menu label="Art" class="kind-dropdown">
             <paper-menu class="dropdown-content">
               <template is="dom-repeat" items="[[measurements]]" as="measurement">
@@ -60,7 +60,7 @@
         </paper-dropdown-menu>
       </div>
       <span>Haltbar bis</span>
-      <paper-input type="date" class="input" value="{{bestBefore::input}}"></paper-input>
+      <paper-input type="date" class="input" value="{{bestBefore}}"></paper-input>
       <div class="horizontal-section-container">
        <div class="horizontal-section">
       <paper-dropdown-menu label="Kategorie">
