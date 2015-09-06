@@ -14,6 +14,10 @@
       min-height: 300px;
       padding: 8px;
     }
+    
+    .dialog-scrollable {
+      @apply(--layout-vertical);
+    }
 
     .count-input-area {
       @apply(--layout-horizontal);
@@ -46,13 +50,35 @@
 
   <template>
     <paper-dialog class="create-dialog" id="dialog">
-      <h2>Neues Element anlegen</h2>  
+      <h2>Neues Element anlegen</h2>
       <paper-dialog-scrollable>
-      <paper-input class="input" value="{{name}}" id="itemName" label="Bezeichnung"></paper-input>
+        <div class="dialog-scrollable">
+      <paper-input 
+        class="input"
+        value="{{item.name}}"
+        id="itemName"
+        label="Bezeichnung"
+        maxlength="30"
+        minlength="5"
+        auto-validate
+        required
+        auto-focus
+        error-message="Bitte Bezeichnung eingeben"
+        ></paper-input>
       <div class="layout-flex count-input-area">
-        <paper-input class="input" id="countInput" value="{{count}}" label="Menge/Anzahl"></paper-input>
-          <paper-dropdown-menu label="Art" class="kind-dropdown">
-            <paper-menu class="dropdown-content">
+        <paper-input 
+          pattern="[0-9]+" 
+          class="input" 
+          id="countInput" 
+          value="{{item.count}}" 
+          label="Menge/Anzahl"
+          error-message="Zahl erforderlich"
+          maxlength="5"
+          minlength="1"
+          auto-validate
+          required></paper-input>
+          <paper-dropdown-menu label="Art" class="kind-dropdown" id="measurementDropdown">
+            <paper-menu class="dropdown-content" selected="0">
               <template is="dom-repeat" items="[[measurements]]" as="measurement">
                 <paper-item>[[measurement]]</paper-item>
               </template>
@@ -60,11 +86,11 @@
         </paper-dropdown-menu>
       </div>
       <span>Haltbar bis</span>
-      <paper-input type="date" class="input" value="{{bestBefore}}"></paper-input>
+      <paper-input type="date" class="input" value="{{item.bestBefore}}"></paper-input>
       <div class="horizontal-section-container">
        <div class="horizontal-section">
-      <paper-dropdown-menu label="Kategorie">
-        <paper-menu class="dropdown-content">
+      <paper-dropdown-menu label="Kategorie" id="categoryDropdown">
+        <paper-menu class="dropdown-content" selected="0">
           <template is="dom-repeat" items="[[categories]]" as="category">
             <paper-item>[[category]]</paper-item>
           </template>
@@ -72,10 +98,11 @@
       </paper-dropdown-menu>
       </div>
       </div>
+      </div>
       </paper-dialog-scrollable>
       <div class="buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button dialog-confirm>Accept</paper-button>
+        <paper-button dialog-dismiss>Abbrechen</paper-button>
+        <paper-button on-click="createItem">Ok</paper-button>
       </div>
     </paper-dialog>
   </template>
@@ -95,11 +122,24 @@
         "Gemüse", 
         "Madeleine"],
         
-        this.measurements = ["kg", "g", "Stk", "l"]
+        this.measurements = ["kg", "g", "Stk", "l"],
+        
+        this.item = {};
       }, 
       
       show: function() {
         this.$.dialog.toggle();      
+      },
+      
+      createItem: function() {
+        this.item.measurement = this.$.measurementDropdown.selectedItemLabel;
+        this.item.category = this.$.categoryDropdown.selectedItemLabel;
+    
+        if (!this.item.measurement) {
+          alert("Maßangabe fehlt");
+        } else {
+          this.$.dialog.close();
+        }       
       }
     });
   })();
