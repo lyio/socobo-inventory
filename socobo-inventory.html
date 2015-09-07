@@ -14,10 +14,6 @@
       bottom: 30px;
       --paper-fab-background: var(--accent-color);
     }
-
-    #inventoryCreateDialog {
-      display: none;
-    }
   </style>
 
   <template>
@@ -35,7 +31,17 @@
     Polymer({
       is: 'socobo-inventory',
 
-      properties: {},
+      properties: {
+		baseUrl: {
+			type: String
+		},
+		userId: {
+			type: String
+		},
+		expireDate: {
+			type: Number
+		}
+	},
 
       ready: function () {
         this.data = [
