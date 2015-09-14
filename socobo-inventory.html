@@ -32,18 +32,19 @@
       is: 'socobo-inventory',
 
       properties: {
-		userLogin: {
-			type: Object
-		}
-	},
-
-      ready: function () {
+		    userLogin: {
+			   type: Object
+		    }
+	   },
+  
+      loadData: function() {
         this.data = [
           {desc: "Mehl", info: "1kg"},
           {desc: "Butter", info: "250g"},
           {desc: "Gurke", info: "2 Stk."},
           {desc: "Puderzucker", info: "2kg"}];
       },
+
       handleCheck: function () {
       },
       handleUncheck: function () {
