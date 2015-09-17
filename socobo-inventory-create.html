@@ -100,7 +100,7 @@
       </paper-dialog-scrollable>
       <div class="buttons">
         <paper-button dialog-dismiss>Abbrechen</paper-button>
-        <paper-button on-click="createItem">Ok</paper-button>
+        <paper-button on-click="_createItem">Ok</paper-button>
       </div>
     </paper-dialog>
   </template>
@@ -118,19 +118,22 @@
         "Backen", 
         "Gewürze", 
         "Gemüse", 
-        "Madeleine"],
+        "Obst"],
         
         this.measurements = ["kg", "g", "Stk", "l"],
         
         this.item = {};
       }, 
       
+      /*Display the dialog
+      @param {Object} userLogin
+      */
       show: function(userLogin) {
         this.$.dialog.toggle();
         this.userLogin = userLogin;
       },
       
-      createItem: function() {
+      _createItem: function() {
         this.item.measurement = this.$.measurementDropdown.selectedItemLabel;
         this.item.category = this.$.categoryDropdown.selectedItemLabel;
     
@@ -140,19 +143,22 @@
           console.log(this.userLogin);
           var ref = new Firebase(this.userLogin.firebaseUrl + "inventory/" + this.userLogin.userId).push();
           this.item.id = ref.key();
-          this.item.created = Firebase.ServerValue.TIMESTAMP; 
-          ref.set(this.item, creationCallback);
+          this.item.created = Firebase.ServerValue.TIMESTAMP;
+          this.item.desc = this.item.name;
+          this.item.info = this.item.count + " " + this.item.measurement;
+          ref.set(this.item, this._creationCallback(this));
         }       
       },
       
-      creationCallback: function(error)  {
-        if (error) {
-          alert("There was an error creating the item");
-          console.log(error);
-        } else {
-          alert("Success!");
-          this.$.dialog.close();
-          
+      _creationCallback: function(that) {
+        return function(error)  {
+          if (error) {
+            alert("There was an error creating the item");
+            console.log(error);
+          } else {
+            that.$.dialog.toggle();
+            alert("Success!");
+          }
         }
       }
     });
