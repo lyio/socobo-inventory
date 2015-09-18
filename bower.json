@@ -1,6 +1,6 @@
 {
   "name": "socobo-inventory",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Inventory Element for Socobo-Frontend",
   "author": [
     "lyio"
