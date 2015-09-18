@@ -14,7 +14,7 @@
       min-height: 300px;
       padding: 8px;
     }
-    
+
     .dialog-scrollable {
       @apply(--layout-vertical);
     }
@@ -39,7 +39,7 @@
       --paper-input-container-focus-color: var(--text-secondary-color);
       --paper-input-container-input-color: var(--text-secondary-color);
     }
-    
+
     .create-dialog .buttons > * {
       margin: 8px;
     }
@@ -51,7 +51,7 @@
       <h2>Neues Element anlegen</h2>
       <paper-dialog-scrollable>
         <div class="dialog-scrollable">
-      <paper-input 
+      <paper-input
         class="input"
         value="{{item.name}}"
         id="itemName"
@@ -64,11 +64,11 @@
         error-message="Bitte Bezeichnung eingeben"
         ></paper-input>
       <div class="layout-flex count-input-area">
-        <paper-input 
-          pattern="[0-9]+" 
-          class="input" 
-          id="countInput" 
-          value="{{item.count}}" 
+        <paper-input
+          pattern="[0-9]+"
+          class="input"
+          id="countInput"
+          value="{{item.count}}"
           label="Menge/Anzahl"
           error-message="Zahl erforderlich"
           maxlength="5"
@@ -92,7 +92,7 @@
           <template is="dom-repeat" items="[[categories]]" as="category">
             <paper-item>[[category]]</paper-item>
           </template>
-        </paper-tabs>
+        </paper-menu>
       </paper-dropdown-menu>
       </div>
       </div>
@@ -112,31 +112,34 @@
       is: 'socobo-inventory-create',
       properties: {
       },
-      
+
       ready: function() {
         this.categories = [
-        "Backen", 
-        "Gewürze", 
-        "Gemüse", 
+        "Backen",
+        "Gewürze",
+        "Gemüse",
         "Obst"],
-        
+
         this.measurements = ["kg", "g", "Stk", "l"],
-        
+
         this.item = {};
-      }, 
-      
+      },
+
       /*Display the dialog
       @param {Object} userLogin
       */
       show: function(userLogin) {
         this.$.dialog.toggle();
         this.userLogin = userLogin;
+
+        // resetting the item
+        this.item = {};
       },
-      
+
       _createItem: function() {
         this.item.measurement = this.$.measurementDropdown.selectedItemLabel;
         this.item.category = this.$.categoryDropdown.selectedItemLabel;
-    
+
         if (!this.item.measurement) {
           alert("Maßangabe fehlt");
         } else {
@@ -147,9 +150,9 @@
           this.item.desc = this.item.name;
           this.item.info = this.item.count + " " + this.item.measurement;
           ref.set(this.item, this._creationCallback(this));
-        }       
+        }
       },
-      
+
       _creationCallback: function(that) {
         return function(error)  {
           if (error) {

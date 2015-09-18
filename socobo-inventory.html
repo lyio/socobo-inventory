@@ -24,7 +24,7 @@
       location="{{location}}"
       data="{{data}}"></firebase-collection>
     <socobo-inventory-overview data="[[data]]"></socobo-inventory-overview>
-    <paper-fab id="inventory-button-add" class="button-add" icon="add" on-click="createItem"></paper-fab>
+    <paper-fab id="inventory-button-add" class="button-add" icon="add" on-click="_createItem"></paper-fab>
   </template>
 
 </dom-module>
@@ -35,18 +35,18 @@
       is: 'socobo-inventory',
 
       properties: {
-		    
-        /*Object containing the user information. Must have following 
-        properties: 
-          - userId, 
+
+        /*Object containing the user information. Must have following
+        properties:
+          - userId,
           - firebaseUrl,
           - expires
         */
         userLogin: {
 			   type: Object
          },
-        
-        /*Specifies the location of the Firebase database 
+
+        /*Specifies the location of the Firebase database
         */
         location: {
           computed: "_handleLogin(userLogin)",
@@ -54,7 +54,7 @@
           value: "https://socobo.firebaseio.com/"
         }
 	   },
-      
+
      /*Construct firebase url for user's inventory from userLogin object</br>
      @param {Object} login
      @method _handleLogin
