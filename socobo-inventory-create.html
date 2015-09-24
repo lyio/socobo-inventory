@@ -76,7 +76,7 @@
           auto-validate
           required></paper-input>
           <paper-dropdown-menu label="Art" class="kind-dropdown" id="measurementDropdown">
-            <paper-menu class="dropdown-content" selected="0">
+            <paper-menu class="dropdown-content" selected="{{measurementDropdownIndex}}">
               <template is="dom-repeat" items="[[measurements]]" as="measurement">
                 <paper-item>[[measurement]]</paper-item>
               </template>
@@ -84,11 +84,11 @@
         </paper-dropdown-menu>
       </div>
       <span>Haltbar bis</span>
-      <paper-input type="date" class="input" value="{{item.bestBefore}}"></paper-input>
+      <paper-input type="date" class="input" value="{{item.bestBefore}}" id="bestBeforeInput"></paper-input>
       <div class="horizontal-section-container">
        <div class="horizontal-section">
-      <paper-dropdown-menu label="Kategorie" id="categoryDropdown">
-        <paper-menu class="dropdown-content" selected="0">
+      <paper-dropdown-menu label="Kategorie" id="categoryDropdown" allowOverflow>
+        <paper-menu class="dropdown-content" selected={{categoryDropdownIndex}}>
           <template is="dom-repeat" items="[[categories]]" as="category">
             <paper-item>[[category]]</paper-item>
           </template>
@@ -123,6 +123,8 @@
         this.measurements = ["kg", "g", "Stk", "l"],
 
         this.item = {};
+        this.categoryDropdownIndex = 0;
+        this.measurementDropdownIndex = 0;
       },
 
       /*Display the dialog
@@ -134,6 +136,9 @@
 
         // resetting the item
         this.item = {};
+        this.$.bestBeforeInput.value = "";
+        this.categoryDropdownIndex = 0;
+        this.measurementDropdownIndex = 0;
       },
 
       _createItem: function() {
