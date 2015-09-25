@@ -87,7 +87,7 @@
       <paper-input type="date" class="input" value="{{item.bestBefore}}" id="bestBeforeInput"></paper-input>
       <div class="horizontal-section-container">
        <div class="horizontal-section">
-      <paper-dropdown-menu label="Kategorie" id="categoryDropdown" allowOverflow>
+      <paper-dropdown-menu label="Kategorie" id="categoryDropdown">
         <paper-menu class="dropdown-content" selected={{categoryDropdownIndex}}>
           <template is="dom-repeat" items="[[categories]]" as="category">
             <paper-item>[[category]]</paper-item>
