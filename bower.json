@@ -1,6 +1,6 @@
 {
   "name": "socobo-inventory",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Inventory Element for Socobo-Frontend",
   "author": [
     "lyio"
@@ -22,12 +22,13 @@
   "homepage": "",
   "ignore": [],
   "dependencies": {
+    "firebase-element": "GoogleWebComponents/firebase-element#~1.0.6",
     "iron-elements": "PolymerElements/iron-elements#1.0.2",
+    "neon-elements": "PolymerElements/neon-elements#1.0.0",
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#~1.0.2",
     "paper-elements": "PolymerElements/paper-elements#1.0.2",
     "platinum-elements": "PolymerElements/platinum-elements#1.1.1",
-    "neon-elements": "PolymerElements/neon-elements#1.0.0",
     "polymer": "Polymer/polymer#^1.0.0",
-    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#~1.0.2",
     "socobo-element-list-item": "hetec/socobo-element-list-item#master"
   },
   "devDependencies": {
