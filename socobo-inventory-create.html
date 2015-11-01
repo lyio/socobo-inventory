@@ -40,6 +40,27 @@
       --paper-input-container-input-color: var(--text-secondary-color);
     }
 
+    .kind-dropdown .input {
+      margin: 0 0 16px 16px;
+    }
+
+    .measurement-input-area {
+      @apply(--layout-horizontal);
+      margin-right: 16px;
+    }
+
+    .measurement-input-area .add-button {
+      margin: 8px 8px 8px 8px;
+      background: var(--accent-color);
+      color: var(--text-primary-color);
+      height: 26px;
+      width: 16px;
+      padding: 2px;
+    }
+
+    .measurement-input-area .add-button .add-button-icon {
+    }
+
     .create-dialog .buttons > * {
       margin: 8px;
     }
@@ -75,12 +96,30 @@
           minlength="1"
           auto-validate
           required></paper-input>
-          <paper-dropdown-menu label="Art" class="kind-dropdown" id="measurementDropdown">
-            <paper-menu class="dropdown-content" selected="{{measurementDropdownIndex}}">
-              <template is="dom-repeat" items="[[measurements]]" as="measurement">
-                <paper-item>[[measurement]]</paper-item>
+        <paper-dropdown-menu label="Art" class="kind-dropdown" id="measurementDropdown">
+          <div class="dropdown-content">
+            <div class="measurement-input-area">
+              <paper-input
+                on-input="_measurementInputChanged"
+                id="measurementInput"
+                class="input measurement-input layout-flex"
+                pattern="[a-zA-Z]+"
+                value="{{measurement}}"
+                no-label-float
+                auto-validate
+                error-message="Zahlen sind nicht gestattet">
+              </paper-input>
+              <paper-button class="add-button" disabled$="{{measurementEmpty}}" on-click="_submitMeasurement">
+                <iron-icon class="add-button-icon" icon="send"></iron-icon>
+              </paper-button>
+            </div>
+            <paper-menu>
+              <array-selector id="selector" items="{{measurements}}" selected="{{displayed}}"></array-selector>
+              <template is="dom-repeat" items="{{displayed}}" as="m">
+                <paper-item>[[m.value]]</paper-item>
               </template>
             </paper-menu>
+          </div>
         </paper-dropdown-menu>
       </div>
       <span>Haltbar bis</span>
@@ -103,6 +142,7 @@
         <paper-button on-click="_createItem">Ok</paper-button>
       </div>
     </paper-dialog>
+    <firebase-collection id="fbMeasurements" location="{{measurementLocation}}" data="{{measurements}}"></firebase-collection>
   </template>
 </dom-module>
 
@@ -110,6 +150,7 @@
   (function() {
     Polymer({
       is: 'socobo-inventory-create',
+      measurementEmpty: true,
       properties: {
       },
 
@@ -118,9 +159,9 @@
         "Backen",
         "Gewürze",
         "Gemüse",
-        "Obst"],
+        "Obst"];
 
-        this.measurements = ["kg", "g", "Stk", "l"],
+        this.measurements = [];
 
         this.item = {};
         this.categoryDropdownIndex = 0;
@@ -133,12 +174,65 @@
       show: function(userLogin) {
         this.$.dialog.toggle();
         this.userLogin = userLogin;
+        this.measurementLocation = "https://dazzling-inferno-402.firebaseio.com/" + "measurements/";
 
         // resetting the item
         this.item = {};
         this.$.bestBeforeInput.value = "";
         this.categoryDropdownIndex = 0;
         this.measurementDropdownIndex = 0;
+        this.measurementEmpty = true;
+      },
+
+      observers: ['_dataChanged(measurements.splices)'],
+
+      /*Observes changes to the measurements list, refreshing the list of shown items when changes occur*/
+      _dataChanged: function (changes) {
+        console.log("changed");
+        this._measurementInputChanged(null);
+      },
+
+      /*Submit the entered measurement type to firebase*/
+      _submitMeasurement: function () {
+        if (!this._measurementInvalid()){
+          console.log("submitting: " + this.measurement);
+          this.item.measurement = this.measurement;
+          this.$.fbMeasurements.add(this.measurement);
+          this.measurement = "";
+          this.$.selector.select(this.measurements);
+        }
+      },
+
+      /*Checks whether a measurement constitutes a valid input.
+      */
+      _measurementInvalid: function () {
+        var measurement = this.measurement;
+        return this.measurement == null || this.measurement.length === 0 ||
+          this.measurements.some(function (m) {
+            return measurement === m.value;
+          })
+      },
+
+      /**Processes changes in the measurement dropdown input field, filtering the dropdown list
+       * accordingly
+       */
+      _measurementInputChanged: function(i) {
+        this.measurementEmpty = this._measurementInvalid();
+        var selector = this.$.selector;
+        var measurement = this.measurement ? this.measurement.toLowerCase() : "";
+        var items = this._fillSelector(this.measurements, measurement);
+
+        // setting the filtered items into the dom-repeat template
+        selector.select(items);
+      },
+
+      /**Filters the array items */
+      _fillSelector: function(items, filterBy) {
+        return items.filter(
+          function (m)  {
+            return m.value.toLowerCase().indexOf(filterBy) > -1;
+          }
+        );
       },
 
       _createItem: function() {
