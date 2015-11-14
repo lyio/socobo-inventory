@@ -1,0 +1,156 @@
+<link rel="import" href="elements.html">
+
+<dom-module id="socobo-inventory-dropdown">
+  <style>
+    :host {
+      display: block;
+    }
+
+    .count-input-area {
+      @apply(--layout-horizontal);
+    }
+
+    .count-input-area .input {
+      @apply(--layout-flex);
+      margin-top: 8px;
+    }
+
+    .kind-dropdown {
+      @apply(--layout-flex);
+    }
+
+    .input {
+      min-width: 100px;
+      max-width: 300px;
+      --paper-input-container-color: var(--text-secondary-color);
+      --paper-input-container-focus-color: var(--text-secondary-color);
+      --paper-input-container-input-color: var(--text-secondary-color);
+    }
+
+    .kind-dropdown .input {
+      margin: 0 0 16px 16px;
+    }
+
+    .measurement-input-area {
+      @apply(--layout-horizontal);
+      margin-right: 16px;
+    }
+
+    .measurement-input-area .add-button {
+      margin: 8px 8px 8px 8px;
+      background: var(--accent-color);
+      color: var(--text-primary-color);
+      height: 26px;
+      width: 16px;
+      padding: 2px;
+    }
+
+    .measurement-input-area .add-button .add-button-icon {
+    }
+
+    .create-dialog .buttons > * {
+      margin: 8px;
+    }
+
+  </style>
+
+  <template>
+        <paper-dropdown-menu label="Art" class="kind-dropdown" id="measurementDropdown">
+          <paper-listbox class="dropdown-content">
+            <div class="measurement-input-area">
+              <paper-input
+                on-input="_measurementInputChanged"
+                id="measurementInput"
+                class="input measurement-input layout-flex"
+                pattern="[a-zA-Z]+"
+                value="{{measurement}}"
+                no-label-float
+                auto-validate
+                error-message="Zahlen sind nicht gestattet">
+              </paper-input>
+              <paper-button class="add-button" disabled$="{{measurementEmpty}}" on-click="_submitMeasurement">
+                <iron-icon class="add-button-icon" icon="send"></iron-icon>
+              </paper-button>
+            </div>
+              <template is="dom-repeat" items="{{displayed}}" as="m">
+                <paper-item>[[m.value]]</paper-item>
+              </template>
+          </paper-listbox>
+        </paper-dropdown-menu>
+      </div>
+    <array-selector id="selector" items="{{measurements}}" selected="{{displayed}}"></array-selector>
+  </template>
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'socobo-inventory-dropdown',
+      measurementEmpty: true,
+      properties: {
+        measurements: {
+          type: Array
+        },
+
+        collection: {
+          type: Object
+        }
+      },
+
+      ready: function() {
+
+      },
+
+      observers: ['_dataChanged(measurements.splices)'],
+
+      /*Observes changes to the measurements list, refreshing the list of shown items when changes occur*/
+      _dataChanged: function (changes) {
+        console.log("changed");
+        this._measurementInputChanged(null);
+      },
+
+      /*Submit the entered measurement type to firebase*/
+      _submitMeasurement: function () {
+        if (!this._measurementInvalid()){
+          console.log("submitting: " + this.measurement);
+          this.collection.add(this.measurement);
+          this.measurement = "";
+          this.$.selector.select(this.measurements);
+          this.$.measurementDropdown.close();
+        }
+      },
+
+      /*Checks whether a measurement constitutes a valid input.
+      */
+      _measurementInvalid: function () {
+        var measurement = this.measurement;
+        return this.measurement == null || this.measurement.length === 0 ||
+          this.measurements.some(function (m) {
+            return measurement === m.value;
+          })
+      },
+
+      /**Processes changes in the measurement dropdown input field, filtering the dropdown list
+       * accordingly
+       */
+      _measurementInputChanged: function(i) {
+        this.measurementEmpty = this._measurementInvalid();
+        var selector = this.$.selector;
+        var measurement = this.measurement ? this.measurement.toLowerCase() : "";
+        var items = this._fillSelector(this.measurements, measurement);
+
+        // setting the filtered items into the dom-repeat template
+        selector.select(items);
+      },
+
+      /**Filters the array items */
+      _fillSelector: function(items, filterBy) {
+        return items.filter(
+          function (m)  {
+            return m.value.toLowerCase().indexOf(filterBy) > -1;
+          }
+        );
+      }
+    });
+  })();
+</script>

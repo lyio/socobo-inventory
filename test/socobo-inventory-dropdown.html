@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>socobo-element-template basic tests</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
+  <script src="../bower_components/iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="../socobo-inventory-dropdown.html">
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+</head>
+<body>
+  <test-fixture id="Dropdown">
+    <template>
+      <socobo-inventory-dropdown></socobo-inventory-dropdown>
+  </template>
+</test-fixture>
+  <script>
+    suite('<socobo-inventory-dropdown>', function() {
+      var inventoryDropdown;
+      var measurementDropdown;
+
+      setup(function () {
+        inventoryDropdown = fixture('Dropdown');
+        measurementDropdown = inventoryDropdown.$.measurementDropdown;
+        inventoryDropdown.$.measurements = ["foo", "bar", "foobar"];
+      });
+
+      test('exists', function(done) {
+        expect(inventoryDropdown).to.not.be.eql(null);
+        done();
+      });
+
+      test('has a measurement dropdown', function (done) {
+        expect(measurementDropdown).to.not.be.eql(null);
+        done();
+      });
+
+      test('has a label', function (done) {
+        expect(measurementDropdown.hasAttribute('label')).to.be.eql(true);
+        done();
+      });
+
+      test('has 3 elements', function (done) {
+        expect(inventoryDropdown.$.measurements.length).to.be.eql(3);
+        done();
+      });
+
+      test('has an input field when opened', function (done) {
+        MockInteractions.tap(inventoryDropdown);
+
+        Polymer.Base.async(function() {
+          var firstItem = Polymer.dom(measurementDropdown).querySelector('paper-input');
+          Polymer.Base.async(function() {
+            expect(firstItem).to.not.be.equal(null);
+            done();
+          });
+        });
+      });
+
+      test('has button when opened', function (done) {
+        MockInteractions.tap(inventoryDropdown);
+
+        Polymer.Base.async(function() {
+          var button = Polymer.dom(measurementDropdown).querySelector('paper-button');
+          Polymer.Base.async(function() {
+            expect(button).to.not.be.equal(null);
+            done();
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>
