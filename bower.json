@@ -1,9 +1,10 @@
 {
   "name": "socobo-inventory",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Inventory Element for Socobo-Frontend",
   "author": [
-    "lyio"
+    "lyio",
+    "flashback2k14"
   ],
   "keywords": [
     "web-components",

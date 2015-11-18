@@ -9,7 +9,7 @@
     }
 
     .button-add {
-      position: absolute;
+			position: absolute;
       right: 30px;
       bottom: 30px;
       --paper-fab-background: var(--accent-color);
@@ -22,8 +22,10 @@
     <firebase-collection
       order-by-child="created"
       location="{{location}}"
-      data="{{data}}"></firebase-collection>
-    <socobo-inventory-overview data="[[data]]"></socobo-inventory-overview>
+      data="{{data}}">
+    </firebase-collection>
+    <socobo-inventory-overview data="[[data]]">
+    </socobo-inventory-overview>
     <paper-fab id="inventory-button-add" class="button-add" icon="add" on-click="_createItem"></paper-fab>
   </template>
 
@@ -35,40 +37,45 @@
       is: 'socobo-inventory',
 
       properties: {
-
-        /*Object containing the user information. Must have following
-        properties:
-          - userId,
-          - firebaseUrl,
-          - expires
-        */
+        /**
+         * Object containing the user information. Must have following properties:
+         * - userId,
+         * - firebaseUrl,
+         * - expires
+         */
         userLogin: {
-			   type: Object
-         },
+          type: Object
+        },
 
-        /*Specifies the location of the Firebase database
-        */
+        /**
+         * Specifies the location of the Firebase database
+         */
         location: {
           computed: "_handleLogin(userLogin)",
           type: String,
           value: "https://socobo.firebaseio.com/"
         }
-	   },
+      },
 
-     /*Construct firebase url for user's inventory from userLogin object</br>
-     @param {Object} login
-     @method _handleLogin
-     */
-     _handleLogin: function(login) {
-       return login.firebaseUrl + "inventory/" + login.userId;
-     },
+     /**
+      * Construct firebase url for user's inventory from userLogin object</br>
+      * @param {Object} login
+			* @private
+      * @method _handleLogin
+      */
+      _handleLogin: function(login) {
+        return login.firebaseUrl + "inventory/" + login.userId;
+      },
 
-     /*Display dialog to create new inventory items
-     */
-     _createItem: function () {
-       this.$.inventoryCreateDialog.style.display = "block";
-       this.$.inventoryCreateDialog.show(this.userLogin);
-     }
+      /**
+       * Display dialog to create new inventory items
+			 * @private
+			 * @method _createItem
+       */
+      _createItem: function () {
+        this.$.inventoryCreateDialog.style.display = "block";
+        this.$.inventoryCreateDialog.show(this.userLogin);
+      }
     });
   })();
 </script>
