@@ -1,174 +1,244 @@
 <link rel="import" href="elements.html">
+<!--
+The following custom properties and mixins are available for styling:
 
+Custom property | Description | Default
+----------------|-------------|----------
+`--socobo-inventory-create-create-dialog` | | `{}`
+`--socobo-inventory-create-style-input-container` |  | `{}`
+`--socobo-inventory-create-style-input-color` |  | `{--text-secondary-color}`
+`--socobo-inventory-create-style-input-focus-color` |  | `{--text-secondary-color}`
+`--socobo-inventory-create-style-input-input-color` |  | `{--text-secondary-color}`
+`--socobo-inventory-create-style-input-only-color-color` |  | `{--text-secondary-color}`
+`--socobo-inventory-create-style-input-only-color-focus-color` | | `{--text-secondary-color}`
+`--socobo-inventory-create-style-input-only-color-input-color` | | `{--text-secondary-color}`
+
+@demo demo/index.html
+-->
 <dom-module id="socobo-inventory-create">
-  <style>
-    :host {
-      display: block;
-    }
-
-    .create-dialog {
-      --paper-dialog-button-color: var(--accent-color);
-      --paper-dialog-title: {
-        color: var(--text-primary-color);
-      };
-      min-height: 300px;
-      padding: 8px;
-    }
-
-    .dialog-scrollable {
-      @apply(--layout-vertical);
-    }
-
-    .count-input-area {
-      @apply(--layout-horizontal);
-    }
-
-    .count-input-area .input {
-      @apply(--layout-flex);
-      margin-top: 8px;
-    }
-
-    .kind-dropdown {
-      @apply(--layout-flex);
-    }
-
-    .input {
-      min-width: 100px;
-      max-width: 300px;
-      --paper-input-container-color: var(--text-secondary-color);
-      --paper-input-container-focus-color: var(--text-secondary-color);
-      --paper-input-container-input-color: var(--text-secondary-color);
-    }
-
-    .create-dialog .buttons > * {
-      margin: 8px;
-    }
-
-  </style>
-
   <template>
-    <paper-dialog class="create-dialog" id="dialog">
+    <style>
+      :host {
+        display: block;
+      }
+      .create-dialog {
+        height: 350px;
+        width: 500px;
+        @apply(--socobo-inventory-create-create-dialog);
+      }
+      .style-paper-dialog-scrollable {
+        margin-top: 0;
+      }
+      .horizontal-layout {
+        @apply(--layout-horizontal);
+        margin-top: 8px;
+      }
+      .vertical-layout {
+        @apply(--layout-vertical);
+      }
+      .width-full {
+        width: 100%;
+      }
+      .width-big {
+        width: 60%;
+      }
+      .width-small {
+        width: 35%;
+        margin-left: 10px;
+      }
+      .style-input {
+        --paper-input-container-input: {
+          width: 440px;
+          @apply(--socobo-inventory-create-style-input-container);
+        };
+        --paper-input-container-color: var(--socobo-inventory-create-style-input-color, --text-secondary-color);
+        --paper-input-container-focus-color: var(--socobo-inventory-create-style-input-focus-color, --text-secondary-color);
+        --paper-input-container-input-color: var(--socobo-inventory-create-style-input-input-color, --text-secondary-color);
+      }
+      .style-input-only-color {
+        --paper-input-container-color: var(--socobo-inventory-create-style-input-only-color-color, --text-secondary-color);
+        --paper-input-container-focus-color: var(--socobo-inventory-create-style-input-only-color-focus-color, --text-secondary-color);
+        --paper-input-container-input-color: var(--socobo-inventory-create-style-input-only-color-input-color, --text-secondary-color);
+      }
+      .style-best-before {
+        padding-top: 25px;
+      }
+      .style-date-picker-row {
+        margin-top: -15px;
+      }
+      .style-dropdown-category {
+        margin-top: 2px;
+      }
+    </style>
+
+    <paper-dialog
+      id="dialog"
+      class="create-dialog"
+      entry-animation="scale-up-animation"
+      exit-animation="fade-out-animation"
+      modal>
       <h2>Neues Element anlegen</h2>
-      <paper-dialog-scrollable>
-        <div class="dialog-scrollable">
-      <paper-input
-        class="input"
-        value="{{item.name}}"
-        id="itemName"
-        label="Bezeichnung"
-        maxlength="30"
-        minlength="5"
-        auto-validate
-        required
-        auto-focus
-        error-message="Bitte Bezeichnung eingeben"
-        ></paper-input>
-      <div class="layout-flex count-input-area">
-        <paper-input
-          pattern="[0-9]+"
-          class="input"
-          id="countInput"
-          value="{{item.count}}"
-          label="Menge/Anzahl"
-          error-message="Zahl erforderlich"
-          maxlength="5"
-          minlength="1"
-          auto-validate
-          required></paper-input>
-          <paper-dropdown-menu label="Art" class="kind-dropdown" id="measurementDropdown">
-            <paper-menu class="dropdown-content" selected="{{measurementDropdownIndex}}">
+      <paper-dialog-scrollable class="style-paper-dialog-scrollable">
+        <!-- 1. Row -->
+        <div class="horizontal-layout">
+          <paper-input
+            id="itemName"
+            class="horizontal-layout width-full style-input"
+            label="Bezeichnung"
+            value="{{item.name}}"
+            maxlength="30"
+            minlength="5"
+            auto-validate
+            required
+            auto-focus
+            error-message="Bitte Bezeichnung eingeben">
+          </paper-input>
+        </div>
+        <!-- 2. Row -->
+        <div class="horizontal-layout">
+          <paper-input
+            id="countInput"
+            class="vertical-layout width-big style-input-only-color"
+            label="Menge/Anzahl"
+            value="{{item.count}}"
+            pattern="[0-9]+"
+            maxlength="5"
+            minlength="1"
+            auto-validate
+            required
+            error-message="Zahl erforderlich">
+          </paper-input>
+          <paper-dropdown-menu
+            id="measurementDropdown"
+            class="vertical-layout width-small"
+            label="Art">
+            <paper-menu
+              class="dropdown-content"
+              selected="{{measurementDropdownIndex}}">
               <template is="dom-repeat" items="[[measurements]]" as="measurement">
                 <paper-item>[[measurement]]</paper-item>
               </template>
             </paper-menu>
-        </paper-dropdown-menu>
-      </div>
-      <span>Haltbar bis</span>
-      <paper-input type="date" class="input" value="{{item.bestBefore}}" id="bestBeforeInput"></paper-input>
-      <div class="horizontal-section-container">
-       <div class="horizontal-section">
-      <paper-dropdown-menu label="Kategorie" id="categoryDropdown">
-        <paper-menu class="dropdown-content" selected={{categoryDropdownIndex}}>
-          <template is="dom-repeat" items="[[categories]]" as="category">
-            <paper-item>[[category]]</paper-item>
-          </template>
-        </paper-menu>
-      </paper-dropdown-menu>
-      </div>
-      </div>
-      </div>
+          </paper-dropdown-menu>
+        </div>
+        <!-- 3. Row -->
+        <div class="horizontal-layout style-best-before">
+          <span>Haltbar bis</span>
+        </div>
+        <!-- 4. Row -->
+        <div class="horizontal-layout style-date-picker-row">
+          <paper-input
+            id="bestBeforeInput"
+            class="vertical-layout width-big"
+            value="{{item.bestBefore}}"
+            type="date">
+          </paper-input>
+          <paper-dropdown-menu
+            id="categoryDropdown"
+            class="vertical-layout width-small style-dropdown-category"
+            label="Kategorie">
+            <paper-menu
+              class="dropdown-content"
+              selected={{categoryDropdownIndex}}>
+              <template is="dom-repeat" items="[[categories]]" as="category">
+                <paper-item>[[category]]</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+        </div>
       </paper-dialog-scrollable>
       <div class="buttons">
-        <paper-button dialog-dismiss>Abbrechen</paper-button>
+        <paper-button dialog-dismiss autofocus>Abbrechen</paper-button>
         <paper-button on-click="_createItem">Ok</paper-button>
       </div>
     </paper-dialog>
   </template>
-</dom-module>
 
-<script>
-  (function() {
-    Polymer({
-      is: 'socobo-inventory-create',
-      properties: {
-      },
+  <script>
+    (function() {
+      Polymer({
+        is: 'socobo-inventory-create',
 
-      ready: function() {
-        this.categories = [
-        "Backen",
-        "Gewürze",
-        "Gemüse",
-        "Obst"],
+        properties: {
+        },
 
-        this.measurements = ["kg", "g", "Stk", "l"],
+        /**
+         * Display the dialog
+         * @param {Object} userLogin
+         * @method show
+         */
+        show: function(userLogin) {
+          this.$.dialog.toggle();
+          this.userLogin = userLogin;
+          // resetting the item
+          this.item = {};
+          this.$.bestBeforeInput.value = "";
+          this.categoryDropdownIndex = 0;
+          this.measurementDropdownIndex = 0;
+        },
 
-        this.item = {};
-        this.categoryDropdownIndex = 0;
-        this.measurementDropdownIndex = 0;
-      },
+        /**
+         *
+         * @private
+         * @method _createItem
+         */
+        _createItem: function() {
+          this.item.measurement = this.$.measurementDropdown.selectedItemLabel;
+          this.item.category = this.$.categoryDropdown.selectedItemLabel;
 
-      /*Display the dialog
-      @param {Object} userLogin
-      */
-      show: function(userLogin) {
-        this.$.dialog.toggle();
-        this.userLogin = userLogin;
-
-        // resetting the item
-        this.item = {};
-        this.$.bestBeforeInput.value = "";
-        this.categoryDropdownIndex = 0;
-        this.measurementDropdownIndex = 0;
-      },
-
-      _createItem: function() {
-        this.item.measurement = this.$.measurementDropdown.selectedItemLabel;
-        this.item.category = this.$.categoryDropdown.selectedItemLabel;
-
-        if (!this.item.measurement) {
-          alert("Maßangabe fehlt");
-        } else {
-          console.log(this.userLogin);
-          var ref = new Firebase(this.userLogin.firebaseUrl + "inventory/" + this.userLogin.userId).push();
-          this.item.id = ref.key();
-          this.item.created = Firebase.ServerValue.TIMESTAMP;
-          this.item.desc = this.item.name;
-          this.item.info = this.item.count + " " + this.item.measurement;
-          ref.set(this.item, this._creationCallback(this));
-        }
-      },
-
-      _creationCallback: function(that) {
-        return function(error)  {
-          if (error) {
-            alert("There was an error creating the item");
-            console.log(error);
+          if (!this.item.measurement) {
+            alert("Maßangabe fehlt");
           } else {
-            that.$.dialog.toggle();
-            alert("Success!");
+            console.log(this.userLogin);
+            var ref = new Firebase(this.userLogin.firebaseUrl + "inventory/" + this.userLogin.userId).push();
+            this.item.id = ref.key();
+            this.item.created = Firebase.ServerValue.TIMESTAMP;
+            this.item.desc = this.item.name;
+            this.item.info = this.item.count + " " + this.item.measurement;
+            ref.set(this.item, this._creationCallback(this));
           }
+        },
+
+        /**
+         *
+         * @param that
+         * @returns {Function}
+         * @private
+         * @method _creationCallback
+         */
+        _creationCallback: function(that) {
+          return function(error)  {
+            if (error) {
+              alert("There was an error creating the item");
+              console.log(error);
+            } else {
+              that.$.dialog.toggle();
+              alert("Success!");
+            }
+          }
+        },
+
+        /**
+         *
+         */
+        ready: function() {
+          this.categories = [
+            "Backen",
+            "Gewürze",
+            "Gemüse",
+            "Obst"
+          ];
+          this.measurements = [
+            "kg",
+            "g",
+            "Stk",
+            "l"
+          ];
+          this.item = {};
+          this.categoryDropdownIndex = 0;
+          this.measurementDropdownIndex = 0;
         }
-      }
-    });
-  })();
-</script>
+      });
+    })();
+  </script>
+</dom-module>

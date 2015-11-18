@@ -1,52 +1,61 @@
 <link rel="import" href="elements.html">
+<!--
+The following custom properties and mixins are available for styling:
 
+Custom property | Description | Default
+----------------|-------------|----------
+`--socobo-inventory-overview-inventory` | | `{}`
+`--socobo-inventory-overview-overview` | | `{}`
+
+@demo demo/index.html
+-->
 <dom-module id="socobo-inventory-overview">
-  <style>
-    :host {
-      display: block;
-    }
-
-    .inventory {
-      margin: 0px;
-      padding: 0px;
-      width: 100%;
-      height: 100%;
-    }
-
-    .searchBox {
-      display: inline-block;
-      width: 100%;
-      @apply(--layout-horizontal);
-    }
-
-    .checkBoxAll {
-      margin-left: 16px;
-      margin-top: 12px;
-      --paper-checkbox-unchecked-color: var(--text-primary-color);
-      --paper-checkbox-checked-color: var(--accent-color)
-    }
-
-    .search-input {
-      @apply(--layout-flex);
-      margin-left: 32px;
-      margin-bottom: 16px;
-      --paper-input-container-color: var(--text-primary-color);
-      --paper-input-container-focus-color: var(--text-primary-color);
-      --paper-input-container-input-color: var(--text-primary-color)
-    }
-
-    .overview {
-      padding: 0px;
-    }
-  </style>
-
   <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .inventory {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        @apply(--socobo-inventory-overview-inventory);
+      }
+      .overview {
+        padding: 0;
+        @apply(--socobo-inventory-overview-overview);
+      }
+      /*BEGIN - Not needed with socobo-element-search*/
+      .searchBox {
+        display: inline-block;
+        width: 100%;
+        @apply(--layout-horizontal);
+      }
+      .checkBoxAll {
+        margin-left: 16px;
+        margin-top: 12px;
+        --paper-checkbox-unchecked-color: var(--text-primary-color);
+        --paper-checkbox-checked-color: var(--accent-color)
+      }
+      .search-input {
+        @apply(--layout-flex);
+        margin-left: 32px;
+        margin-bottom: 16px;
+        --paper-input-container-color: var(--text-primary-color);
+        --paper-input-container-focus-color: var(--text-primary-color);
+        --paper-input-container-input-color: var(--text-primary-color)
+      }
+      /*END - Not needed with socobo-element-search*/
+    </style>
+
     <paper-material vertical layout class="inventory" elevation="1">
+      <!-- BEGIN - Not needed with socobo-element-search -->
       <paper-toolbar class="searchBox">
         <paper-checkbox class="checkBoxAll" id="inventoryCheckBoxAll"></paper-checkbox>
         <paper-input class="search-input" id="inventorySearch" label="Suche"></paper-input>
       </paper-toolbar>
-
+      <!-- END - Not needed with socobo-element-search -->
       <paper-material elevation="1">
         <div id="inventoryOverview" class="overview">
           <template is="dom-repeat" items="{{data}}">
@@ -62,24 +71,37 @@
     </paper-material>
   </template>
 
-</dom-module>
+  <script>
+    (function () {
+      Polymer({
+        is: 'socobo-inventory-overview',
 
-<script>
-  (function () {
-    Polymer({
-      is: 'socobo-inventory-overview',
+        properties: {
+          /**
+           *
+           */
+          data: {
+            type: Array,
+            notify: true
+          }
+        },
 
-      properties: {
-        data: {
-          type: Array,
-          notify: true
+        /**
+         *
+         * @private
+         * @method _handleCheck
+         */
+        _handleCheck: function () {
+        },
+
+        /**
+         *
+         * @private
+         * @method _handleUncheck
+         */
+        _handleUncheck: function () {
         }
-      },
-
-      _handleCheck: function () {
-      },
-      _handleUncheck: function () {
-      }
-    });
-  })();
-</script>
+      });
+    })();
+  </script>
+</dom-module>
