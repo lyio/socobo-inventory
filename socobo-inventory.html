@@ -1,22 +1,27 @@
 <link rel="import" href="elements.html">
-<link rel="import" href="socobo-inventory-create.html">
-<link rel="import" href="socobo-inventory-overview.html">
+<!--
+The following custom properties and mixins are available for styling:
 
+Custom property | Description | Default
+----------------|-------------|----------
+`--socobo-inventory-button-add-background` | | `{--accent-color}`
+
+@demo demo/index.html
+-->
 <dom-module id="socobo-inventory">
-  <style>
-    :host {
-      display: block;
-    }
-
-    .button-add {
-			position: absolute;
-      right: 30px;
-      bottom: 30px;
-      --paper-fab-background: var(--accent-color);
-    }
-  </style>
-
   <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .button-add {
+        position: absolute;
+        right: 30px;
+        bottom: 30px;
+        --paper-fab-background: var(--socobo-inventory-button-add-background, --accent-color);
+      }
+    </style>
+
     <socobo-inventory-create id="inventoryCreateDialog">
     </socobo-inventory-create>
     <firebase-collection
@@ -29,53 +34,52 @@
     <paper-fab id="inventory-button-add" class="button-add" icon="add" on-click="_createItem"></paper-fab>
   </template>
 
-</dom-module>
+  <script>
+    (function () {
+      Polymer({
+        is: 'socobo-inventory',
 
-<script>
-  (function () {
-    Polymer({
-      is: 'socobo-inventory',
+        properties: {
+          /**
+           * Object containing the user information. Must have following properties:
+           * - userId,
+           * - firebaseUrl,
+           * - expires
+           */
+          userLogin: {
+            type: Object
+          },
 
-      properties: {
-        /**
-         * Object containing the user information. Must have following properties:
-         * - userId,
-         * - firebaseUrl,
-         * - expires
-         */
-        userLogin: {
-          type: Object
+          /**
+           * Specifies the location of the Firebase database
+           */
+          location: {
+            computed: "_handleLogin(userLogin)",
+            type: String,
+            value: ""
+          }
         },
 
         /**
-         * Specifies the location of the Firebase database
+         * Construct firebase url for user's inventory from userLogin object</br>
+         * @param {Object} login
+         * @private
+         * @method _handleLogin
          */
-        location: {
-          computed: "_handleLogin(userLogin)",
-          type: String,
-          value: "https://socobo.firebaseio.com/"
+        _handleLogin: function(login) {
+          return login.firebaseUrl + "inventory/" + login.userId;
+        },
+
+        /**
+         * Display dialog to create new inventory items
+         * @private
+         * @method _createItem
+         */
+        _createItem: function () {
+          this.$.inventoryCreateDialog.style.display = "block";
+          this.$.inventoryCreateDialog.show(this.userLogin);
         }
-      },
-
-     /**
-      * Construct firebase url for user's inventory from userLogin object</br>
-      * @param {Object} login
-			* @private
-      * @method _handleLogin
-      */
-      _handleLogin: function(login) {
-        return login.firebaseUrl + "inventory/" + login.userId;
-      },
-
-      /**
-       * Display dialog to create new inventory items
-			 * @private
-			 * @method _createItem
-       */
-      _createItem: function () {
-        this.$.inventoryCreateDialog.style.display = "block";
-        this.$.inventoryCreateDialog.show(this.userLogin);
-      }
-    });
-  })();
-</script>
+      });
+    })();
+  </script>
+</dom-module>
