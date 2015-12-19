@@ -22,17 +22,15 @@
   "homepage": "",
   "ignore": [],
   "dependencies": {
-    "firebase-element": "GoogleWebComponents/firebase-element#~1.0.6",
-    "iron-elements": "PolymerElements/iron-elements#1.0.2",
+    "firebase-element": "GoogleWebComponents/firebase-element#~1.0.8",
+    "iron-elements": "PolymerElements/iron-elements#1.0.4",
     "neon-elements": "PolymerElements/neon-elements#1.0.0",
-    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#~1.0.2",
-    "paper-elements": "PolymerElements/paper-elements#1.0.2",
-    "platinum-elements": "PolymerElements/platinum-elements#1.1.1",
-    "polymer": "Polymer/polymer#^1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#1.0.6",
+    "polymer": "Polymer/polymer#^1.2.0",
     "socobo-element-list-item": "hetec/socobo-element-list-item#master"
   },
   "devDependencies": {
-    "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
+    "iron-component-page": "polymerelements/iron-component-page#^1.0.9",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
     "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0",
     "test-fixture": "polymerelements/test-fixture#^1.0.0",
