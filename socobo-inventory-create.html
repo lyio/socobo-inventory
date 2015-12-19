@@ -1,174 +1,175 @@
 <link rel="import" href="elements.html">
 
 <dom-module id="socobo-inventory-create">
-  <style>
-    :host {
-      display: block;
-    }
-
-    .create-dialog {
-      --paper-dialog-button-color: var(--accent-color);
-      --paper-dialog-title: {
-        color: var(--text-primary-color);
-      };
-      min-height: 300px;
-      padding: 8px;
-    }
-
-    .dialog-scrollable {
-      @apply(--layout-vertical);
-    }
-
-    .count-input-area {
-      @apply(--layout-horizontal);
-    }
-
-    .count-input-area .input {
-      @apply(--layout-flex);
-      margin-top: 8px;
-    }
-
-    .kind-dropdown {
-      @apply(--layout-flex);
-    }
-
-    .input {
-      min-width: 100px;
-      max-width: 300px;
-      --paper-input-container-color: var(--text-secondary-color);
-      --paper-input-container-focus-color: var(--text-secondary-color);
-      --paper-input-container-input-color: var(--text-secondary-color);
-    }
-
-    .create-dialog .buttons > * {
-      margin: 8px;
-    }
-
-  </style>
-
   <template>
-    <paper-dialog class="create-dialog" id="dialog">
-      <h2>Neues Element anlegen</h2>
-      <paper-dialog-scrollable>
-        <div class="dialog-scrollable">
-      <paper-input
-        class="input"
-        value="{{item.name}}"
-        id="itemName"
-        label="Bezeichnung"
-        maxlength="30"
-        minlength="5"
-        auto-validate
-        required
-        auto-focus
-        error-message="Bitte Bezeichnung eingeben"
-        ></paper-input>
-      <div class="layout-flex count-input-area">
-        <paper-input
-          pattern="[0-9]+"
-          class="input"
-          id="countInput"
-          value="{{item.count}}"
-          label="Menge/Anzahl"
-          error-message="Zahl erforderlich"
-          maxlength="5"
-          minlength="1"
-          auto-validate
-          required></paper-input>
-          <paper-dropdown-menu label="Art" class="kind-dropdown" id="measurementDropdown">
-            <paper-menu class="dropdown-content" selected="{{measurementDropdownIndex}}">
-              <template is="dom-repeat" items="[[measurements]]" as="measurement">
-                <paper-item>[[measurement]]</paper-item>
-              </template>
-            </paper-menu>
-        </paper-dropdown-menu>
-      </div>
-      <span>Haltbar bis</span>
-      <paper-input type="date" class="input" value="{{item.bestBefore}}" id="bestBeforeInput"></paper-input>
-      <div class="horizontal-section-container">
-       <div class="horizontal-section">
-      <paper-dropdown-menu label="Kategorie" id="categoryDropdown">
-        <paper-menu class="dropdown-content" selected={{categoryDropdownIndex}}>
-          <template is="dom-repeat" items="[[categories]]" as="category">
-            <paper-item>[[category]]</paper-item>
-          </template>
-        </paper-menu>
-      </paper-dropdown-menu>
-      </div>
-      </div>
-      </div>
-      </paper-dialog-scrollable>
-      <div class="buttons">
-        <paper-button dialog-dismiss>Abbrechen</paper-button>
-        <paper-button on-click="_createItem">Ok</paper-button>
-      </div>
-    </paper-dialog>
-  </template>
-</dom-module>
-
-<script>
-  (function() {
-    Polymer({
-      is: 'socobo-inventory-create',
-      properties: {
-      },
-
-      ready: function() {
-        this.categories = [
-        "Backen",
-        "Gewürze",
-        "Gemüse",
-        "Obst"],
-
-        this.measurements = ["kg", "g", "Stk", "l"],
-
-        this.item = {};
-        this.categoryDropdownIndex = 0;
-        this.measurementDropdownIndex = 0;
-      },
-
-      /*Display the dialog
-      @param {Object} userLogin
-      */
-      show: function(userLogin) {
-        this.$.dialog.toggle();
-        this.userLogin = userLogin;
-
-        // resetting the item
-        this.item = {};
-        this.$.bestBeforeInput.value = "";
-        this.categoryDropdownIndex = 0;
-        this.measurementDropdownIndex = 0;
-      },
-
-      _createItem: function() {
-        this.item.measurement = this.$.measurementDropdown.selectedItemLabel;
-        this.item.category = this.$.categoryDropdown.selectedItemLabel;
-
-        if (!this.item.measurement) {
-          alert("Maßangabe fehlt");
-        } else {
-          console.log(this.userLogin);
-          var ref = new Firebase(this.userLogin.firebaseUrl + "inventory/" + this.userLogin.userId).push();
-          this.item.id = ref.key();
-          this.item.created = Firebase.ServerValue.TIMESTAMP;
-          this.item.desc = this.item.name;
-          this.item.info = this.item.count + " " + this.item.measurement;
-          ref.set(this.item, this._creationCallback(this));
+    <style>
+        :host {
+        display: block;
         }
-      },
 
-      _creationCallback: function(that) {
-        return function(error)  {
-          if (error) {
-            alert("There was an error creating the item");
-            console.log(error);
+        .create-dialog {
+        --paper-dialog-button-color: var(--accent-color);
+        --paper-dialog-title: {
+            color: var(--text-primary-color);
+        };
+        min-height: 300px;
+        padding: 8px;
+        }
+
+        .dialog-scrollable {
+        @apply(--layout-vertical);
+        }
+
+        .count-input-area {
+        @apply(--layout-horizontal);
+        }
+
+        .count-input-area .input {
+        @apply(--layout-flex);
+        margin-top: 8px;
+        }
+
+        .kind-dropdown {
+        @apply(--layout-flex);
+        }
+
+        .input {
+        min-width: 100px;
+        max-width: 300px;
+        --paper-input-container-color: var(--text-secondary-color);
+        --paper-input-container-focus-color: var(--text-secondary-color);
+        --paper-input-container-input-color: var(--text-secondary-color);
+        }
+
+        .create-dialog .buttons > * {
+        margin: 8px;
+        }
+
+    </style>
+    <div>
+      <paper-dialog class="create-dialog" id="dialog">
+        <h2>Neues Element anlegen</h2>
+        <paper-dialog-scrollable>
+          <div class="dialog-scrollable">
+            <paper-input
+              class="input"
+              value="{{item.name}}"
+              id="itemName"
+              label="Bezeichnung"
+              maxlength="30"
+              minlength="5"
+              auto-validate
+              required
+              auto-focus
+              error-message="Bitte Bezeichnung eingeben"
+              ></paper-input>
+            <div class="layout-flex count-input-area">
+                <paper-input
+                  pattern="[0-9]+"
+                  class="input"
+                  id="countInput"
+                  value="{{item.count}}"
+                  label="Menge/Anzahl"
+                  error-message="Zahl erforderlich"
+                  maxlength="5"
+                  minlength="1"
+                  auto-validate
+                  required></paper-input>
+                <paper-dropdown-menu label="Art" class="kind-dropdown" id="measurementDropdown">
+                  <paper-menu class="dropdown-content" selected="{{measurementDropdownIndex}}">
+                    <template is="dom-repeat" items="[[measurements]]" as="measurement">
+                      <paper-item>[[measurement]]</paper-item>
+                    </template>
+                  </paper-menu>
+                </paper-dropdown-menu>
+            </div>
+            <span>Haltbar bis</span>
+            <paper-input type="date" class="input" value="{{item.bestBefore}}" id="bestBeforeInput"></paper-input>
+            <div class="horizontal-section-container">
+              <div class="horizontal-section">
+                <paper-dropdown-menu label="Kategorie" id="categoryDropdown">
+                  <paper-menu class="dropdown-content" selected={{categoryDropdownIndex}}>
+                    <template is="dom-repeat" items="[[categories]]" as="category">
+                        <paper-item>[[category]]</paper-item>
+                    </template>
+                  </paper-menu>
+                </paper-dropdown-menu>
+              </div>
+            </div>
+          </div>
+        </paper-dialog-scrollable>
+        <div class="buttons">
+          <paper-button dialog-dismiss>Abbrechen</paper-button>
+          <paper-button on-click="_createItem">Ok</paper-button>
+        </div>
+      </paper-dialog>
+    </div>
+  </template>
+  <script>
+    (function() {
+      Polymer({
+        is: 'socobo-inventory-create',
+        properties: {
+        },
+
+        ready: function() {
+          this.categories = [
+          "Backen",
+          "Gewürze",
+          "Gemüse",
+          "Obst"],
+
+          this.measurements = ["kg", "g", "Stk", "l"],
+
+          this.item = {};
+          this.categoryDropdownIndex = 0;
+          this.measurementDropdownIndex = 0;
+        },
+
+        /*Display the dialog
+        @param {Object} userLogin
+        */
+        show: function(userLogin) {
+          this.$.dialog.toggle();
+          this.userLogin = userLogin;
+
+          // resetting the item
+          this.item = {};
+          this.$.bestBeforeInput.value = "";
+          this.categoryDropdownIndex = 0;
+          this.measurementDropdownIndex = 0;
+        },
+
+        _createItem: function() {
+          this.item.measurement = this.$.measurementDropdown.selectedItemLabel;
+          this.item.category = this.$.categoryDropdown.selectedItemLabel;
+
+          if (!this.item.measurement) {
+            alert("Maßangabe fehlt");
           } else {
-            that.$.dialog.toggle();
-            alert("Success!");
+            console.log(this.userLogin);
+            var ref = new Firebase(this.userLogin.firebaseUrl + "inventory/" + this.userLogin.userId).push();
+            this.item.id = ref.key();
+            this.item.created = Firebase.ServerValue.TIMESTAMP;
+            this.item.desc = this.item.name;
+            this.item.info = this.item.count + " " + this.item.measurement;
+            ref.set(this.item, this._creationCallback(this));
+          }
+        },
+
+        _creationCallback: function(that) {
+          return function(error)  {
+            if (error) {
+              alert("There was an error creating the item");
+              console.log(error);
+            } else {
+              that.$.dialog.toggle();
+              alert("Success!");
+            }
           }
         }
-      }
-    });
-  })();
-</script>
+      });
+    })();
+  </script>
+</dom-module>
+
