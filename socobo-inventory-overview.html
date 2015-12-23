@@ -104,6 +104,7 @@
         
         _checkOrUncheck: function(state) {
           var itemList = document.querySelectorAll(".inventory-list-item");
+          itemList = itemList ? itemList : [];
           itemList.forEach(function(element) {
               if (!element.hidden) {
                 element.isChecked = state;
