@@ -19,10 +19,11 @@
     <div>
       <socobo-inventory-create id="inventoryCreateDialog"></socobo-inventory-create>
       <firebase-collection
+        id="inventoryCollection"
         order-by-child="created"
         location="{{location}}"
         data="{{data}}"></firebase-collection>
-      <socobo-inventory-overview data="[[data]]"></socobo-inventory-overview>
+      <socobo-inventory-overview on-delete_request = "_deleteInventoryItem" data="[[data]]"></socobo-inventory-overview>
       <paper-fab id="inventory-button-add" class="button-add" icon="add" on-click="_createItem"></paper-fab>
     </div>
   </template>
@@ -66,6 +67,12 @@
         _createItem: function () {
         this.$.inventoryCreateDialog.style.display = "block";
         this.$.inventoryCreateDialog.show(this.userLogin);
+        },
+        
+        /*Handles delete events bubbling up from the overview element  
+         */
+        _deleteInventoryItem(e) {
+          this.$.inventoryCollection.remove(e.detail);
         }
         });
     })();
