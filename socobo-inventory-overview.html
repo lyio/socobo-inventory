@@ -46,7 +46,8 @@
           id="searchHeader" 
           on-check-all-items="_handleCheckAll"
           on-uncheck-all-items="_handleUncheckAll"
-          on-changed-search-query="_searchQueryChanged">
+          on-changed-search-query="_searchQueryChanged"
+          on-clear-search-query="_searchQueryCleared">
         </socobo-element-search>
 
         <paper-material elevation="1">
@@ -88,6 +89,10 @@
         _searchQueryChanged: function(e) {
           this.query = e.detail.searchQuery;  
         },
+        
+        _searchQueryCleared: function(e) {
+          this._searchQueryChanged({detail: {searchQuery: null}})
+        },
 
         _handleCheckAll: function () {
             this._checkOrUncheck(true);
@@ -104,12 +109,11 @@
         
         _checkOrUncheck: function(state) {
           var itemList = document.querySelectorAll(".inventory-list-item");
-          itemList = itemList ? itemList : [];
-          itemList.forEach(function(element) {
+          for (var element of itemList) {
               if (!element.hidden) {
                 element.isChecked = state;
               }  
-            });
+          }
         }
       });
     })();
