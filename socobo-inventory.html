@@ -17,13 +17,13 @@
         }
     </style>
     <div>
-        <socobo-inventory-create id="inventoryCreateDialog"></socobo-inventory-create>
-        <firebase-collection
+      <socobo-inventory-create id="inventoryCreateDialog"></socobo-inventory-create>
+      <firebase-collection
         order-by-child="created"
         location="{{location}}"
         data="{{data}}"></firebase-collection>
-        <socobo-inventory-overview data="[[data]]"></socobo-inventory-overview>
-    <paper-fab id="inventory-button-add" class="button-add" icon="add" on-click="_createItem"></paper-fab>
+      <socobo-inventory-overview data="[[data]]"></socobo-inventory-overview>
+      <paper-fab id="inventory-button-add" class="button-add" icon="add" on-click="_createItem"></paper-fab>
     </div>
   </template>
 

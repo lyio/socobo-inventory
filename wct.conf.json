@@ -7,7 +7,7 @@
       "disabled": true,
       "browsers": [
         "chrome",
-        "firefox"
+        "edge"
       ]
     }
   }
