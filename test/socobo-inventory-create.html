@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>socobo-element-template basic tests</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
+  <script src="../bower_components/iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="../socobo-inventory.html">
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+</head>
+<body>
+
+  <!-- ToDo: -->
+  <test-fixture id="InventoryCreate">
+    <template>
+      <socobo-inventory-create></socobo-inventory-create>
+    </template>
+  </test-fixture>
+
+  <script>
+    /* ToDo: */
+    suite('<socobo-inventory-create>', function() {
+      var dialog;
+
+      setup(function() {
+        dialog = fixture('InventoryCreate');
+      });
+
+      test('has an ok button', function(done) {
+        expect(dialog.$.createItemButton).to.not.be.eql(undefined);
+        done();
+      });
+      
+      test('has a cancel button', function(done) {
+        expect(dialog.$.cancelDialogButton).to.not.be.eql(undefined);
+        done();
+      });
+      
+      test('has a save button', function(done) {
+        expect(dialog.$.editItemButton).to.not.be.eql(undefined);
+        done();
+      });
+      
+      test('show sets the userLogin data', function(done) {
+        var login = {firebaseUrl: "foo", userId: "bar", expires:"23456"};
+        dialog.show(login);
+        expect(dialog.userLogin).to.be.eql(login);
+        done();
+      });
+      
+      test('show sets item data if present', function(done) {
+        var login = {firebaseUrl: "foo", userId: "bar", expires:"23456"};
+        var item = {desc: 'test item', info: 'test info'};
+        dialog.show(login, item);
+        expect(dialog.item.desc).to.be.eql(item.desc);
+        expect(dialog.item.info).to.be.eql(item.info)
+        done();
+      });
+      
+      test('show sets item data to initial values if nothing is passed in', function(done) {
+        var login = {firebaseUrl: "foo", userId: "bar", expires:"23456"};
+        dialog.show(login);
+        expect(dialog.item.desc).to.be.eql(undefined);
+        expect(dialog.item.info).to.be.eql(undefined);
+        done();
+      });
+      
+      test('edit button is hidden when not edit mode', function(done) {
+        dialog.show({});
+        expect(dialog.$.editItemButton.hidden).to.be.eql(true);
+        done();
+      });
+      
+      test('create button is hidden when in edit mode', function(done) {
+        dialog.show({}, {});
+        expect(dialog.$.createItemButton.hidden).to.be.eql(true);
+        done();
+      });
+      
+      test('clicking save fires an edit event', function(done) {
+        dialog.addEventListener('edit-item', function(e) {
+          expect(e.detail).to.not.be.eql(null)
+          expect(e.detail).to.not.be.eql(undefined)
+          done();
+        });
+        
+        dialog.show({}, {});
+        var saveButton = dialog.$.editItemButton;
+        MockInteractions.tap(saveButton);
+      })
+    });
+  </script>
+</body>
+</html>

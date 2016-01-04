@@ -91,6 +91,7 @@ Custom property | Description | Default
               auto-validate
               required
               auto-focus
+              $disabled="[[_edit]]"
               error-message="Please enter a name"
               ></paper-input>
           </div>
@@ -111,7 +112,9 @@ Custom property | Description | Default
                   label="Measurement" 
                   class="vertical-layout width-small" 
                   id="measurementDropdown">
-                  <paper-menu class="dropdown-content" selected="{{measurementDropdownIndex}}">
+                  <paper-menu 
+                    id="measurementDropdownMenu"
+                    class="dropdown-content">
                     <template is="dom-repeat" items="[[measurements]]" as="measurement">
                       <paper-item>[[measurement]]</paper-item>
                     </template>
@@ -133,8 +136,8 @@ Custom property | Description | Default
               label="Category" 
               id="categoryDropdown">
               <paper-menu 
-                class="dropdown-content" 
-                selected={{categoryDropdownIndex}}>
+                id="categoryDropdownMenu"
+                class="dropdown-content">
                 <template is="dom-repeat" items="[[categories]]" as="category">
                   <paper-item>[[category]]</paper-item>
                 </template>
@@ -143,8 +146,9 @@ Custom property | Description | Default
           </div>
         </paper-dialog-scrollable>
         <div class="buttons">
-          <paper-button dialog-dismiss>Cancel</paper-button>
-          <paper-button on-click="_createItem">Ok</paper-button>
+          <paper-button id="cancelDialogButton" dialog-dismiss>Cancel</paper-button>
+          <paper-button hidden="[[_edit]]" id="createItemButton" on-click="_createItem">Ok</paper-button>
+          <paper-button hidden="[[!_edit]]" id="editItemButton" on-click="_editItem">Save</paper-button>
         </div>
       </paper-dialog>
     </div>
@@ -163,31 +167,44 @@ Custom property | Description | Default
           "Gemüse",
           "Obst"],
 
-          this.measurements = ["kg", "g", "Stk", "l"],
-
-          this.item = {};
-          this.categoryDropdownIndex = 0;
-          this.measurementDropdownIndex = 0;
+          this.measurements = ["kg", "g", "Stk", "l"];
         },
 
         /*Display the dialog
         @param {Object} userLogin
+        @param {Object} itemToEdit
         */
-        show: function(userLogin) {
+        show: function(userLogin, itemToEdit) {
           this.$.dialog.toggle();
           this.userLogin = userLogin;
-
-          // resetting the item
-          this.item = {};
-          this.$.bestBeforeInput.value = "";
-          this.categoryDropdownIndex = 0;
-          this.measurementDropdownIndex = 0;
+          
+          this._resetItem(itemToEdit);
+          this._edit = itemToEdit != undefined;
+        },
+        
+        hide: function() {
+          this.$.dialog.toggle();
+        },
+        
+        _resetItem: function(item) {
+          if (item != undefined) {
+            this.item = item;
+            this.$.bestBeforeInput.value = item.bestBefore
+            this.$.categoryDropdownMenu.select(this.categories.indexOf(item.category));
+            this.$.measurementDropdownMenu.select(this.measurements.indexOf(item.measurement));
+          } else {
+            // resetting the item
+            this.item = {};
+            this.$.bestBeforeInput.value = "";
+            this.$.categoryDropdownMenu.select(-1);
+            this.$.measurementDropdownMenu.select(-1);
+          }
         },
 
         _createItem: function() {
-          this.item.measurement = this.$.measurementDropdown.selectedItemLabel;
-          this.item.category = this.$.categoryDropdown.selectedItemLabel;
-
+          this.item.measurement = this.measurements[this.$.measurementDropdownMenu.selected];
+          this.item.category = this.categories[this.$.categoryDropdownMenu.selected];
+          
           if (!this.item.measurement) {
             alert("Maßangabe fehlt");
           } else {
@@ -199,6 +216,12 @@ Custom property | Description | Default
             this.item.info = this.item.count + " " + this.item.measurement;
             ref.set(this.item, this._creationCallback(this));
           }
+        },
+        
+        _editItem: function(e,detail) {
+          this.item.desc = this.item.name;
+          this.item.info = this.item.count + " " + this.item.measurement;
+          this.fire('edit-item', this.item);
         },
 
         _creationCallback: function(that) {
