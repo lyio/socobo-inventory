@@ -89,9 +89,56 @@
           done();
         });
         
+        dialog.show({}, {name: "Valid name", count: "4", measurement: "pcs"});
+        var saveButton = dialog.$.editItemButton;
+        MockInteractions.tap(saveButton);
+      });
+      
+      test('clicking save does not fire an edit event for invalid item', function(done) {
+        dialog.addEventListener('edit-item', function(e) {
+          expect(true).to.be.eql(false, "Event was fired for invalid item");
+          done();
+        });
+        
         dialog.show({}, {});
         var saveButton = dialog.$.editItemButton;
         MockInteractions.tap(saveButton);
+        done();
+      });
+      
+      test('valid items are validated correctly', function(done) {
+        var validItem = {name: "Valid name", count: "4", measurement: "g"}
+        expect(dialog._validate(validItem)).to.be.eql(true);
+        
+        done();
+      })
+      
+      test('items without measurement are not valid', function(done) {
+        var invalidItem = {name: "Valid name", count: "4"}
+        expect(dialog._validate(invalidItem)).to.be.eql(false);
+        
+        done();
+      });
+      
+      test('items without name are not valid', function(done) {
+        var invalidItem = {count: "4"}
+        expect(dialog._validate(invalidItem)).to.be.eql(false);
+        
+        done();
+      });
+      
+      test('items too short name are not valid', function(done) {
+        var invalidItem = {name: "name"}
+        expect(dialog._validate(invalidItem)).to.be.eql(false);
+        
+        done();
+      });
+      
+      test('items without count are not valid', function(done) {
+        var invalidItem = {name: "Valid name", measurement: "kg"}
+        expect(dialog._validate(invalidItem)).to.be.eql(false);
+        
+        done();
       })
     });
   </script>

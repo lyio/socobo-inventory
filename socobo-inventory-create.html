@@ -205,8 +205,8 @@ Custom property | Description | Default
           this.item.measurement = this.measurements[this.$.measurementDropdownMenu.selected];
           this.item.category = this.categories[this.$.categoryDropdownMenu.selected];
           
-          if (!this.item.measurement) {
-            alert("Maßangabe fehlt");
+          if (!this._validate(this.item)) {
+            alert("Some information is missing");
           } else {
             console.log(this.userLogin);
             var ref = new Firebase(this.userLogin.firebaseUrl + "inventory/" + this.userLogin.userId).push();
@@ -219,9 +219,18 @@ Custom property | Description | Default
         },
         
         _editItem: function(e,detail) {
-          this.item.desc = this.item.name;
-          this.item.info = this.item.count + " " + this.item.measurement;
-          this.fire('edit-item', this.item);
+          if(this._validate(this.item)) {
+            this.item.desc = this.item.name;
+            this.item.info = this.item.count + " " + this.item.measurement;
+            this.fire('edit-item', this.item);
+          }
+        },
+        
+        _validate: function(item) {
+          if(!item.name || item.name.length < 5) return false;
+          if(!item.measurement || item.measurement < 0) return false;
+          if(!item.count) return false;
+          return true;
         },
 
         _creationCallback: function(that) {
