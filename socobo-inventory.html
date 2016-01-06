@@ -18,6 +18,16 @@
     </style>
     <div>
       <socobo-inventory-create id="inventoryCreateDialog"></socobo-inventory-create>
+      
+      <paper-dialog id="confirmationDialog" modal>
+        <h2>Remove item</h2>
+        <span>Are you sure you want to remove this item?</span>
+        <div class="buttons">
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm on-click="_confirmDelete">Ok</paper-button>
+        </div>
+      </paper-dialog>
+      
       <firebase-collection
         id="inventoryCollection"
         order-by-child="created"
@@ -72,7 +82,12 @@
         /*Handles delete events bubbling up from the overview element  
          */
         _deleteInventoryItem(e) {
-          this.$.inventoryCollection.remove(e.detail);
+          this.$.confirmationDialog.item = e.detail;
+          this.$.confirmationDialog.toggle();
+        },
+        
+        _confirmDelete: function(e) {
+          this.$.inventoryCollection.remove(this.$.confirmationDialog.item);
         }
         });
     })();

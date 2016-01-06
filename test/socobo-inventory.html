@@ -25,19 +25,24 @@
   <script>
     /* ToDo: */
     suite('<socobo-inventory>', function() {
-      var button;
+      var inventory;
 
       setup(function() {
-        button = fixture('Inventory');
+        inventory = fixture('Inventory');
       });
 
       test('has an add button', function(done) {
-        expect(button.$.inventoryButtonAdd).to.not.be.eql(null);
+        expect(inventory.$.inventoryButtonAdd).to.not.be.eql(null);
         done();
       });
       
       test('has creation dialog', function(done) {
-        expect(button.$.inventoryCreateDialog).to.not.be.eql(null);
+        expect(inventory.$.inventoryCreateDialog).to.not.be.eql(null);
+        done();
+      });
+      
+      test('has a delete confirmation dialog', function(done) {
+        expect(inventory.$.confirmationDialog).to.not.be.eql(undefined);
         done();
       });
     });
