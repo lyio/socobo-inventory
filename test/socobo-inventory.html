@@ -32,12 +32,12 @@
       });
 
       test('has an add button', function(done) {
-        expect(inventory.$.inventoryButtonAdd).to.not.be.eql(null);
+        expect(inventory.$.inventoryButtonAdd).to.not.be.eql(undefined);
         done();
       });
       
       test('has creation dialog', function(done) {
-        expect(inventory.$.inventoryCreateDialog).to.not.be.eql(null);
+        expect(inventory.$.inventoryCreateDialog).to.not.be.eql(undefined);
         done();
       });
       
