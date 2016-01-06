@@ -48,15 +48,15 @@
             - expires
             */
             userLogin: {
-                type: Object
+              type: Object
             },
 
             /*Specifies the location of the Firebase database
             */
             location: {
-            computed: "_handleLogin(userLogin)",
-            type: String,
-            value: "https://socobo.firebaseio.com/"
+              computed: "_handleLogin(userLogin)",
+              type: String,
+              value: "https://socobo.firebaseio.com/"
             }
         },
 
@@ -65,14 +65,14 @@
         @method _handleLogin
         */
         _handleLogin: function(login) {
-        return login.firebaseUrl + "inventory/" + login.userId;
+          return login.firebaseUrl + "inventory/" + login.userId;
         },
 
         /*Display dialog to create new inventory items
         */
         _createItem: function () {
-        this.$.inventoryCreateDialog.style.display = "block";
-        this.$.inventoryCreateDialog.show(this.userLogin);
+          this.$.inventoryCreateDialog.style.display = "block";
+          this.$.inventoryCreateDialog.show(this.userLogin);
         },
         
         /* Display dialog to edit inventory items
