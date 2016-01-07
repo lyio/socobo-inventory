@@ -20,6 +20,7 @@
       <socobo-inventory-create 
         id="inventoryCreateDialog" 
         on-edit-item="_saveItem"
+        on-create-item="_onCreateItem"
       ></socobo-inventory-create>
       
       <paper-dialog id="confirmationDialog" modal>
@@ -39,7 +40,7 @@
       
       <socobo-inventory-overview 
         on-edit_request="_editItem" 
-        on-delete_request = "_deleteInventoryItem" 
+        on-delete_request = "_deleteInventoryItem"
         data="[[data]]">
       </socobo-inventory-overview>
       <paper-fab id="inventoryButtonAdd" class="button-add" icon="add" on-click="_createItem"></paper-fab>
@@ -77,7 +78,7 @@
         @method _handleLogin
         */
         _handleLogin: function(login) {
-          return login.firebaseUrl + "inventory/" + login.userId;
+          return login.firebaseUrl + "inventory/" + login.userId + "/";
         },
 
         /*Display dialog to create new inventory items
@@ -85,6 +86,15 @@
         _createItem: function () {
           this.$.inventoryCreateDialog.style.display = "block";
           this.$.inventoryCreateDialog.show(this.userLogin);
+        },
+        
+        _onCreateItem: function(e) {
+          var item = e.detail;
+          item.created = Firebase.ServerValue.TIMESTAMP;
+          
+          //var ref = new Firebase(this.userLogin.firebaseUrl + "inventory/" + this.userLogin.userId).push();
+          this.$.inventoryCollection.add(item);
+          this.$.inventoryCreateDialog.hide();
         },
         
         /*Handles delete events bubbling up from the overview element  
@@ -110,8 +120,8 @@
         _saveItem: function(e) {
           var item = e.detail;
           var self = this;
-          if (item.id) {
-            var ref = new Firebase(this._handleLogin(this.userLogin) + "/" + item.id);
+          if (item.__firebaseKey__) {
+            var ref = new Firebase(this._handleLogin(this.userLogin) + "/" + item.__firebaseKey__);
             ref.update(item, function(error) {
               if (error) {
                 alert("There was an error updating the item");

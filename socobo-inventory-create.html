@@ -203,18 +203,16 @@ Custom property | Description | Default
 
         _createItem: function() {
           this.item.measurement = this.measurements[this.$.measurementDropdownMenu.selected];
-          this.item.category = this.categories[this.$.categoryDropdownMenu.selected];
-          
+          if (this.$.categoryDropdownMenu.selected != -1) {
+            this.item.category = this.categories[this.$.categoryDropdownMenu.selected];
+          }
           if (!this._validate(this.item)) {
             alert("Some information is missing");
           } else {
-            console.log(this.userLogin);
-            var ref = new Firebase(this.userLogin.firebaseUrl + "inventory/" + this.userLogin.userId).push();
-            this.item.id = ref.key();
-            this.item.created = Firebase.ServerValue.TIMESTAMP;
-            this.item.desc = this.item.name;
             this.item.info = this.item.count + " " + this.item.measurement;
-            ref.set(this.item, this._creationCallback(this));
+            this.item.desc = this.item.name;
+            
+            this.fire('create-item', this.item);
           }
         },
         
@@ -232,18 +230,6 @@ Custom property | Description | Default
           if(!item.count) return false;
           return true;
         },
-
-        _creationCallback: function(that) {
-          return function(error)  {
-            if (error) {
-              alert("There was an error creating the item");
-              console.log(error);
-            } else {
-              that.$.dialog.toggle();
-              alert("Success!");
-            }
-          }
-        }
       });
     })();
   </script>
