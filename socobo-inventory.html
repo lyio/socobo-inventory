@@ -21,13 +21,25 @@
         id="inventoryCreateDialog" 
         on-edit-item="_saveItem"
       ></socobo-inventory-create>
+      
+      <paper-dialog id="confirmationDialog" modal>
+        <h2>Remove item</h2>
+        <span>Are you sure you want to remove this item?</span>
+        <div class="buttons">
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm on-click="_confirmDelete">Ok</paper-button>
+        </div>
+      </paper-dialog>
+      
       <firebase-collection
         id="inventoryCollection"
         order-by-child="created"
         location="{{location}}"
         data="{{data}}"></firebase-collection>
+      
       <socobo-inventory-overview 
-        on-edit_request="_editItem"
+        on-edit_request="_editItem" 
+        on-delete_request = "_deleteInventoryItem" 
         data="[[data]]">
       </socobo-inventory-overview>
       <paper-fab id="inventoryButtonAdd" class="button-add" icon="add" on-click="_createItem"></paper-fab>
@@ -75,6 +87,17 @@
           this.$.inventoryCreateDialog.show(this.userLogin);
         },
         
+        /*Handles delete events bubbling up from the overview element  
+         */
+        _deleteInventoryItem(e) {
+          this.$.confirmationDialog.item = e.detail;
+          this.$.confirmationDialog.toggle();
+        },
+        
+        _confirmDelete: function(e) {
+          this.$.inventoryCollection.remove(this.$.confirmationDialog.item);
+        },
+ 
         /* Display dialog to edit inventory items
         */
         _editItem: function(e) {
