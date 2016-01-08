@@ -22,8 +22,7 @@
     </template>
   </test-fixture>
 
-  <script>
-
+  <script>    
     suite('<socobo-inventory-overview>', function() {
       var overview;
 
@@ -76,6 +75,26 @@
           done();
         });
       });
+    });
+    
+    suite('<socobo-overview> item deletion', function() {
+      var overview;
+      
+      setup(function() {
+        overview = fixture('SocoboOverview');
+      });
+      
+      test('deletion event bubbles up', function(done) {
+        overview.addEventListener('delete_request', function(e) {
+          done();
+        })
+        
+        overview.data = [{desc: "foo", info: "foo"}, {desc: "bar", info: "bar"}];
+        flush(function() {
+          var button = overview.querySelector('.delete').querySelector('.paper-icon-button');
+          MockInteractions.tap(button);
+        });
+      })
     });
   </script>
 </body>

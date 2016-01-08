@@ -20,14 +20,27 @@
       <socobo-inventory-create 
         id="inventoryCreateDialog" 
         on-edit-item="_saveItem"
+        on-create-item="_onCreateItem"
       ></socobo-inventory-create>
+      
+      <paper-dialog id="confirmationDialog" modal>
+        <h2>Remove item</h2>
+        <span>Are you sure you want to remove this item?</span>
+        <div class="buttons">
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm on-click="_confirmDelete">Ok</paper-button>
+        </div>
+      </paper-dialog>
+      
       <firebase-collection
         id="inventoryCollection"
         order-by-child="created"
         location="{{location}}"
         data="{{data}}"></firebase-collection>
+      
       <socobo-inventory-overview 
-        on-edit_request="_editItem"
+        on-edit_request="_editItem" 
+        on-delete_request = "_deleteInventoryItem"
         data="[[data]]">
       </socobo-inventory-overview>
       <paper-fab id="inventoryButtonAdd" class="button-add" icon="add" on-click="_createItem"></paper-fab>
@@ -65,21 +78,41 @@
         @method _handleLogin
         */
         _handleLogin: function(login) {
-          return login.firebaseUrl + "inventory/" + login.userId;
+          return login.firebaseUrl + "inventory/" + login.userId + "/";
         },
 
         /*Display dialog to create new inventory items
         */
         _createItem: function () {
           this.$.inventoryCreateDialog.style.display = "block";
-          this.$.inventoryCreateDialog.show(this.userLogin);
+          this.$.inventoryCreateDialog.show();
         },
         
+        _onCreateItem: function(e) {
+          var item = e.detail;
+          item.created = Firebase.ServerValue.TIMESTAMP;
+          
+          //var ref = new Firebase(this.userLogin.firebaseUrl + "inventory/" + this.userLogin.userId).push();
+          this.$.inventoryCollection.add(item);
+          this.$.inventoryCreateDialog.hide();
+        },
+        
+        /*Handles delete events bubbling up from the overview element  
+         */
+        _deleteInventoryItem(e) {
+          this.$.confirmationDialog.item = e.detail;
+          this.$.confirmationDialog.toggle();
+        },
+        
+        _confirmDelete: function(e) {
+          this.$.inventoryCollection.remove(this.$.confirmationDialog.item);
+        },
+ 
         /* Display dialog to edit inventory items
         */
         _editItem: function(e) {
           this.$.inventoryCreateDialog.style.display = "block";
-          this.$.inventoryCreateDialog.show(this.userLogin, e.detail);
+          this.$.inventoryCreateDialog.show(e.detail);
         },
         
         /* Save changes made to inventory items
@@ -87,15 +120,15 @@
         _saveItem: function(e) {
           var item = e.detail;
           var self = this;
-          if (item.id) {
-            var ref = new Firebase(this._handleLogin(this.userLogin) + "/" + item.id);
+          if (item.__firebaseKey__) {
+            var ref = new Firebase(this._handleLogin(this.userLogin) + "/" + item.__firebaseKey__);
             ref.update(item, function(error) {
               if (error) {
                 alert("There was an error updating the item");
                 console.log(error);
-            } else {
-              self.$.inventoryCreateDialog.hide();
-            }
+              } else {
+                self.$.inventoryCreateDialog.hide();
+              }
             });
           }
         }
