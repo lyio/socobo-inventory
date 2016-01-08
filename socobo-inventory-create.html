@@ -182,10 +182,12 @@ Custom property | Description | Default
           this._edit = itemToEdit != undefined;
         },
         
+        /* Hide the dialog
+        */
         hide: function() {
           this.$.dialog.toggle();
         },
-        
+                
         _resetItem: function(item) {
           if (item != undefined) {
             this.item = item;
@@ -219,11 +221,23 @@ Custom property | Description | Default
         },
         
         _editItem: function(e,detail) {
-          if(this._validate(this.item)) {
-            this.item.desc = this.item.name;
-            this.item.info = this.item.count + " " + this.item.measurement;
-            this.fire('edit-item', this.item);
+          var item = this._populateItem(this.item);
+          if(this._validate(item)) {
+            this.fire('edit-item', item);
+          } else {
+            alert('Some information is missing');
           }
+        },
+        
+        _populateItem: function(item) {
+          item.measurement = this.measurements[this.$.measurementDropdownMenu.selected];
+          item.category = this.categories[this.$.categoryDropdownMenu.selected];
+          
+          item.desc = item.name;
+          item.info = item.count + " " + item.measurement;
+          
+          console.dir(item);
+          return item;
         },
         
         _validate: function(item) {
