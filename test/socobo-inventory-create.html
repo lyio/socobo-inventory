@@ -80,7 +80,7 @@
           done();
         });
         
-        dialog.show({}, {name: "Valid name", count: "4", measurement: "pcs"});
+        dialog.show({name: "Valid name", count: "4", measurement: "pcs"});
         dialog.$.measurementDropdownMenu.select(0);
         var saveButton = dialog.$.editItemButton;
         MockInteractions.tap(saveButton);
@@ -131,9 +131,9 @@
           done();
         });
         
-        dialog.show({});
+        dialog.show();
         dialog.item = {name: "Valid name", count: "4", measurement: "g"};
-        dialog.$.measurementDropdownMenu.select(0);
+        dialog.$.measurementDropdownMenu.selected = 1;
         var createButton = dialog.$.createItemButton;
         MockInteractions.tap(createButton);
       });

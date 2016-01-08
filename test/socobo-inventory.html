@@ -45,6 +45,18 @@
         expect(inventory.$.confirmationDialog).to.not.be.eql(undefined);
         done();
       });
+      
+      test('_handleLogin updates location', function(done) {
+        var login = {firebaseUrl: "foobar.io/", userId: "234567890"};
+        expect(inventory._handleLogin(login)).to.be.eql(login.firebaseUrl + "inventory/" + login.userId + "/");
+        done();
+      });
+      
+      test('_handleLogin called with null does not update location', function(done) {
+        inventory.location = "test.location.io/";
+        expect(inventory._handleLogin(null)).to.be.eql(inventory.location);
+        done();
+      });
     });
   </script>
 </body>
