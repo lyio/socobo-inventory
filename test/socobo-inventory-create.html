@@ -46,38 +46,29 @@
         done();
       });
       
-      test('show sets the userLogin data', function(done) {
-        var login = {firebaseUrl: "foo", userId: "bar", expires:"23456"};
-        dialog.show(login);
-        expect(dialog.userLogin).to.be.eql(login);
-        done();
-      });
-      
       test('show sets item data if present', function(done) {
-        var login = {firebaseUrl: "foo", userId: "bar", expires:"23456"};
         var item = {desc: 'test item', info: 'test info'};
-        dialog.show(login, item);
+        dialog.show(item);
         expect(dialog.item.desc).to.be.eql(item.desc);
         expect(dialog.item.info).to.be.eql(item.info)
         done();
       });
       
       test('show sets item data to initial values if nothing is passed in', function(done) {
-        var login = {firebaseUrl: "foo", userId: "bar", expires:"23456"};
-        dialog.show(login);
+        dialog.show();
         expect(dialog.item.desc).to.be.eql(undefined);
         expect(dialog.item.info).to.be.eql(undefined);
         done();
       });
       
       test('edit button is hidden when not edit mode', function(done) {
-        dialog.show({});
+        dialog.show();
         expect(dialog.$.editItemButton.hidden).to.be.eql(true);
         done();
       });
       
       test('create button is hidden when in edit mode', function(done) {
-        dialog.show({}, {});
+        dialog.show({});
         expect(dialog.$.createItemButton.hidden).to.be.eql(true);
         done();
       });
@@ -89,7 +80,7 @@
           done();
         });
         
-        dialog.show({}, {name: "Valid name", count: "4", measurement: "pcs"});
+        dialog.show({name: "Valid name", count: "4", measurement: "pcs"});
         var saveButton = dialog.$.editItemButton;
         MockInteractions.tap(saveButton);
       });
@@ -100,7 +91,7 @@
           done();
         });
         
-        dialog.show({}, {});
+        dialog.show({});
         var saveButton = dialog.$.editItemButton;
         MockInteractions.tap(saveButton);
         done();

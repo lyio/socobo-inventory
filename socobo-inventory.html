@@ -85,7 +85,7 @@
         */
         _createItem: function () {
           this.$.inventoryCreateDialog.style.display = "block";
-          this.$.inventoryCreateDialog.show(this.userLogin);
+          this.$.inventoryCreateDialog.show();
         },
         
         _onCreateItem: function(e) {
@@ -112,7 +112,7 @@
         */
         _editItem: function(e) {
           this.$.inventoryCreateDialog.style.display = "block";
-          this.$.inventoryCreateDialog.show(this.userLogin, e.detail);
+          this.$.inventoryCreateDialog.show(e.detail);
         },
         
         /* Save changes made to inventory items
@@ -126,9 +126,9 @@
               if (error) {
                 alert("There was an error updating the item");
                 console.log(error);
-            } else {
-              self.$.inventoryCreateDialog.hide();
-            }
+              } else {
+                self.$.inventoryCreateDialog.hide();
+              }
             });
           }
         }

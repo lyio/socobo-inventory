@@ -174,9 +174,8 @@ Custom property | Description | Default
         @param {Object} userLogin
         @param {Object} itemToEdit
         */
-        show: function(userLogin, itemToEdit) {
+        show: function(itemToEdit) {
           this.$.dialog.toggle();
-          this.userLogin = userLogin;
           
           this._resetItem(itemToEdit);
           this._edit = itemToEdit != undefined;
