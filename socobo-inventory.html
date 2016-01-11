@@ -78,7 +78,14 @@
         @method _handleLogin
         */
         _handleLogin: function(login) {
-          return login.firebaseUrl + "inventory/" + login.userId + "/";
+          var url = "";
+          if (login) {
+            url = login.firebaseUrl + "inventory/";
+            url = login.userId ? url + login.userId + "/" : url
+          } else {
+            url = this.location;
+          }
+          return url;
         },
 
         /*Display dialog to create new inventory items
