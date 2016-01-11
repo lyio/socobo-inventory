@@ -57,6 +57,14 @@
         expect(inventory._handleLogin(null)).to.be.eql(inventory.location);
         done();
       });
+      
+      
+      test('_handleLogin called with null userId does reset the location', function(done) {
+        var location = "test.location.io/";
+        inventory.location = location
+        expect(inventory._handleLogin({firebaseUrl: location, userId: null})).to.be.eql(location + "inventory/");
+        done();
+      });
     });
   </script>
 </body>
